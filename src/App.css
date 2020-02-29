@@ -1,19 +1,4 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -24,15 +9,51 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.LoginBoxOut {
+  width: 70vh;
+  height: 70vh;
+  background-color: white;
+  border-radius: 10vh;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.LoginBoxIn {
+  background-color: aliceblue;
+  border-radius: 10vh;
+  margin: 10vh 0vh;
+  width: 70vh;
+  height: 70vh;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  color: black;
+}
+
+.Form{
+  display: flex;
+  flex-direction: column;
+  /*align-items: center;*/
+}
+
+.FormLabels {
+  font-size: medium;
+  font-weight: normal;
+}
+
+.FormBoxes {
+  margin: 1vh 0vh;
+  height: 4vh;
+  width: 35vh;
+  padding-left: 1vh;
+  border-radius: 1vh;
+}
+
+.Button {
+  margin-top: 4vh;
+  height: 5vh;
+  background-color: royalblue;
+  color: white;
+  border-radius: 1vh;
+  font-size: large;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  border-color: royalblue;
 }
