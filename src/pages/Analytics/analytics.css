@@ -1,0 +1,22 @@
+.root {
+    display: 'flex';
+}
+  
+.appBar {
+    width: calc(100% - 240px);
+    margin-left: 240px;
+}
+
+.drawer {
+    width: 240px;
+    flex-shrink: 0;
+}
+
+.drawerPaper {
+    width: 240;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 3px,
+}
