@@ -13,13 +13,13 @@ import Collapse from '@material-ui/core/Collapse';
 
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import PieChartIcon from '@material-ui/icons/PieChart';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import TimelineIcon from '@material-ui/icons/Timeline';
+import StorageIcon from '@material-ui/icons/Storage';
 import PersonIcon from '@material-ui/icons/Person';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import Bikes from './components/Bikes';
 
 const drawerWidth = 300;
 
@@ -58,6 +58,7 @@ function Database() {
       setOpen(!open);
     };
 
+
     return (
         <div className={classes.root}>
           <CssBaseline />
@@ -81,7 +82,7 @@ function Database() {
             <List>
                 <ListItem button>
                     <ListItemIcon>
-                        <BarChartIcon/>
+                        <StorageIcon/>
                     </ListItemIcon>
                     <ListItemText primary="Collections"/>
                 </ListItem>
@@ -119,7 +120,7 @@ function Database() {
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                Collections
+                <Bikes />
             </div>
           </main>
         </div>
