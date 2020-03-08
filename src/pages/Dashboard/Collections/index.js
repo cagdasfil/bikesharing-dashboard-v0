@@ -14,6 +14,9 @@ import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { FaBicycle } from 'react-icons/fa';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import ErrorIcon from '@material-ui/icons/Error';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -63,6 +66,8 @@ export default function Collections() {
     setExpanded(newExpanded ? panel : false);
   };
 
+  const tabs = ["Users", "Bikes", "Dockers", "Usages", "Payments", "Transactions", "Errors"];
+
   return (
     <div>
       <ExpansionPanel square expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
@@ -77,31 +82,35 @@ export default function Collections() {
           <ListItemText primary="Collections"/>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <List component="div" disablePadding>
-            <ListItem button>
-              <ListItemIcon>
-                <PersonIcon/>
-              </ListItemIcon>
-              <ListItemText primary="Users" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <DirectionsBikeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Bikes" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <LocationOnIcon/>
-              </ListItemIcon>
-              <ListItemText primary="Dockers" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <MonetizationOnIcon/>
-              </ListItemIcon>
-              <ListItemText primary="Transactions" />
-            </ListItem>
+        <List>
+            {tabs.map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon> 
+                  {
+                    index === 0 ? <PersonIcon/> : null
+                  }
+                  {
+                    index === 1 ? <FaBicycle size={25}/> : null
+                  }
+                  {
+                    index === 2 ? <LocationOnIcon/> : null
+                  }
+                  {
+                    index === 3 ? <DirectionsBikeIcon/> : null
+                  }
+                  {
+                    index === 4 ? <MonetizationOnIcon/> : null
+                  }
+                  {
+                    index === 5 ? <SwapHorizIcon/> : null
+                  }
+                  {
+                    index === 6 ? <ErrorIcon/> : null
+                  }
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
           </List>
         </ExpansionPanelDetails>
       </ExpansionPanel>

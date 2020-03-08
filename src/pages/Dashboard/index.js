@@ -11,6 +11,7 @@ import Bikes from './Collections/components/Bikes';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Dockers from './Collections/components/Dockers';
 
 const drawerWidth = 240;
 
@@ -102,7 +103,7 @@ export default function Dashboard() {
         [classes.contentShift]: open,
         })}
       >
-        <Bikes />
+        <Dockers />
       </main>
     </div>
   );

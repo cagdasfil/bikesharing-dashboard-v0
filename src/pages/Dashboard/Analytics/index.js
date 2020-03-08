@@ -61,6 +61,8 @@ export default function Analytics() {
     setExpanded(newExpanded ? panel : false);
   };
 
+  const tabs = ['Pie Charts', 'Bar Graphs', 'Timelines'];
+
   return (
     <div>
       <ExpansionPanel square expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
@@ -76,7 +78,7 @@ export default function Analytics() {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <List>
-            {['Pie Charts', 'Bar Graphs', 'Timelines'].map((text, index) => (
+            {tabs.map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon> 
                   {
