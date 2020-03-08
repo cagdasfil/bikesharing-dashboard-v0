@@ -56,7 +56,7 @@ const ExpansionPanelDetails = withStyles(theme => ({
   },
 }))(MuiExpansionPanelDetails);
 
-export default function Database() {
+export default function Collections() {
   const [expanded, setExpanded] = React.useState('panel1');
 
   const handleChange = panel => (event, newExpanded) => {

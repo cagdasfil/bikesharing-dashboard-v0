@@ -4,9 +4,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Database from './Database';
+import Collections from './Collections';
 import Analytics from './Analytics';
-import Bikes from './components/Bikes';
+import Bikes from './Collections/components/Bikes';
 
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -94,7 +94,7 @@ export default function Dashboard() {
           {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>
         </div>
-        <Database/>
+        <Collections/>
         <Analytics />
       </Drawer>
       <main
