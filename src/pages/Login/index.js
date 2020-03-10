@@ -18,7 +18,7 @@ function Login() {
   }
 
   function loginHandler() {
-    history.push("/transition");
+    history.push("/dashboard");
   }
 
   return (
