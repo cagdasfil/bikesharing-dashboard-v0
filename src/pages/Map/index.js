@@ -9,8 +9,21 @@ import { render } from "@testing-library/react";
 function Mapping() {
 
   const [zone, setZone] = React.useState([]);
+  
+  //const [newZone, setNewZone] = React.useState([]);
 
-  let ben = [[]]
+  const [newZone, setnew] = React.useState([]);
+
+  let ben = [
+    [0 , 0 ],
+    [0 , 0 ],
+    [0 , 0 ],
+    [0 , 0 ],
+  ];
+
+  const [checkZone, setCheck] = React.useState(true);
+
+
 
   let polygon = [[
     [39.890905, 32.785445],
@@ -23,7 +36,7 @@ function Mapping() {
       [39.891975, 32.783118]
       ]];
 
-    let bi = [39.8909236,32.7777734];
+  let bi = [39.8909236,32.7777734];
   
 
   const handleZoneData = (data) => {
@@ -37,9 +50,15 @@ function Mapping() {
       dgn = []
     }
     setZone(zoneData);
+    setCheck(false);
   };
 
-  fetch('http://35.234.156.204/dockers')
+  
+
+
+  if (checkZone === true){
+
+    fetch('http://35.234.156.204/dockers')
         .then((response) => {
             return response.json();
         })
@@ -47,6 +66,15 @@ function Mapping() {
           handleZoneData(data);
             //console.log(data[0].coordinates.geometry)
     });
+    setCheck(false);
+  }
+    
+
+
+
+  
+  
+  
   
 
   return (
@@ -55,13 +83,16 @@ function Mapping() {
     
       
       <Map center={[39.8909236,32.7777734]} zoom={10}>
+        
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
         <Marker position={bi} ></Marker>
-        <Polygon positions={[zone]} color='#000099' ></Polygon>
+        <Polygon positions={[zone]} color='#0099CC' ></Polygon>
+      
+        <Polygon positions={newZone} color='#660033'></Polygon>
         
         
       </Map>
@@ -72,35 +103,55 @@ function Mapping() {
             <div>Coordinates</div>
             <div className="Setting">
             <Form.Label className="FormLabels">x1 : </Form.Label>
-            <Form.Control className="FormBoxes"/>
+            <Form.Control className="FormBoxes"
+              onChange={e => ben[0][0]=Number(e.target.value)}
+            />
             <Form.Label className="FormLabels">y1 : </Form.Label>
-            <Form.Control className="FormBoxes"/>
+            <Form.Control className="FormBoxes"
+              onChange={e => ben[0][1]=Number(e.target.value)}
+            />
+            <Button className ="SetMargin" type="submit">Set</Button>
             </div>
             <div className="Setting">
             <Form.Label className="FormLabels">x2 : </Form.Label>
-            <Form.Control className="FormBoxes"/>
+            <Form.Control className="FormBoxes"
+              onChange={e => ben[1][0]=Number(e.target.value)}
+            />
+              
             <Form.Label className="FormLabels">y2 : </Form.Label>
-            <Form.Control className="FormBoxes"/>
+            <Form.Control className="FormBoxes"
+            onChange={e => ben[1][1]=Number(e.target.value)}
+            />
             </div>
             <div className="Setting"> 
             <Form.Label className="FormLabels">x3 : </Form.Label>
-            <Form.Control className="FormBoxes"/>
+            <Form.Control className="FormBoxes"
+            onChange={e => ben[2][0]=Number(e.target.value)}
+            />
             <Form.Label className="FormLabels">y3 : </Form.Label>
-            <Form.Control className="FormBoxes"/>
+            <Form.Control className="FormBoxes"
+            onChange={e => ben[2][1]=Number(e.target.value)}
+            />
             </div>
             <div className="Setting">
             <Form.Label className="FormLabels">x4 : </Form.Label>
-            <Form.Control className="FormBoxes"/>
+            <Form.Control className="FormBoxes"
+            onChange={e => ben[3][0]=Number(e.target.value)}
+            />
             <Form.Label className="FormLabels">y4 : </Form.Label>
-            <Form.Control className="FormBoxes"/>
+            <Form.Control className="FormBoxes"
+            onChange={e => ben[3][1]=Number(e.target.value)}
+            />
             </div>
-            <Button className ="SetMargin" type="submit">Set</Button>
+            <Button className ="SetMargin" type="button" onClick={function() {setnew(ben)}}>Set</Button>
           </div>
             
             
         
         </form>
       </div>
+
+      
       
   </div>
   
