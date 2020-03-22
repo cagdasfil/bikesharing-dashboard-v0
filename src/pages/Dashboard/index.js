@@ -6,13 +6,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Collections from './Collections';
 import Analytics from './Analytics';
-import Bikes from './Collections/components/Bikes';
+//import Bikes from './Collections/components/Bikes';
 
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Dockers from './Collections/components/Dockers';
-import Usages from './Collections/components/Usages';
+//import Usages from './Collections/components/Usages';
 
 const drawerWidth = 240;
 
@@ -104,7 +104,7 @@ export default function Dashboard() {
         [classes.contentShift]: open,
         })}
       >
-        <Usages />
+        <Dockers />
       </main>
     </div>
   );

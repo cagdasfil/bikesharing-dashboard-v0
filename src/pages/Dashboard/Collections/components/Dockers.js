@@ -66,12 +66,12 @@ const columns = [
     };
 
     const handleCoordinateData = (coordinates) => {
-        var stringCoordinates = ""
-        coordinates[0].map((c)=>{
+        return coordinates[0].map((c)=>{
+            var stringCoordinates = ""
             stringCoordinates += "["+c[0].toString()+",\n";
             stringCoordinates += c[1].toString()+"],\n";
+            return stringCoordinates;
         });
-        return stringCoordinates;
     }
 
     const handleDockerData = (data) => {

@@ -1,51 +1,59 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Form } from "react-bootstrap";
 import './login.css';
 import history from "../../services/history";
 
-function Login() {
+export default class Login extends React.Component{
 
-  const [admin, setAdmin] = useState("");
-  const [password, setPassword] = useState("");
-
-  function validateForm() {
-    return admin.length > 0 && password.length > 0;
+  constructor(props){
+    super(props);
+    this.state={
+      admin : "",
+      password : ""
+    };
+    this.validateForm = this.validateForm.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.loginHandler = this.loginHandler.bind(this);
   }
 
-  function handleSubmit(event) {
+  validateForm() {
+    return this.state.admin.length > 0 && this.state.password.length > 0;
+  }
+
+  handleSubmit(event) {
     event.preventDefault();
   }
 
-  function loginHandler() {
+  loginHandler() {
     history.push("/dashboard");
   }
 
-  return (
-    <div className="Login">
-        <div className="LoginBoxIn">
-          <form onSubmit={handleSubmit} className="Form">
-            <Form.Label className="FormLabels">Admin</Form.Label>
-            <Form.Control
-              autoFocus
-              type="admin"
-              value={admin}
-              onChange={e => setAdmin(e.target.value)}
-              className="FormBoxes"
-            />
-            <Form.Label className="FormLabels">Password</Form.Label>
-            <Form.Control
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              type="password"
-              className="FormBoxes"
-            />
-            <Button className="Button" block bsSize="large" disabled={!validateForm()} type="submit" onClick={loginHandler}>
-                Login
-            </Button>
-          </form>
-        </div>
-    </div>
-  );
+  render(){
+    return (
+      <div className="Login">
+          <div className="LoginBoxIn">
+            <form onSubmit={this.handleSubmit} className="Form">
+              <Form.Label className="FormLabels">Admin</Form.Label>
+              <Form.Control
+                autoFocus
+                type="admin"
+                value={this.state.admin}
+                onChange={e => this.setState({admin : e.target.value})}
+                className="FormBoxes"
+              />
+              <Form.Label className="FormLabels">Password</Form.Label>
+              <Form.Control
+                value={this.state.password}
+                onChange={e => this.setState({password : e.target.value})}
+                type="password"
+                className="FormBoxes"
+              />
+              <Button className="Button" block bsSize="large" disabled={!this.validateForm()} type="submit" onClick={this.loginHandler}>
+                  Login
+              </Button>
+            </form>
+          </div>
+      </div>
+    );
+  }
 }
-
-export default Login;
