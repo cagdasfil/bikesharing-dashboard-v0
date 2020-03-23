@@ -98,7 +98,7 @@ export default class Dashboard extends React.Component {
           </IconButton>
           </div>
           <Collections callBack={this.handleClick} />
-          <Analytics />
+          <Analytics callBack={this.handleClick}/>
         </Drawer>
         <main
           style={this.state.open ? classes.contentShift : classes.content}
