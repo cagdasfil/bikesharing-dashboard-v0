@@ -17,6 +17,13 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FaBicycle } from 'react-icons/fa';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 import ErrorIcon from '@material-ui/icons/Error';
+import Usages from "./components/Usages";
+import Users from './components/Users';
+import Bikes from './components/Bikes';
+import Dockers from './components/Dockers';
+import Payments from './components/Payments';
+import Transactions from './components/Transactions';
+import Errors from './components/Errors';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -73,6 +80,17 @@ export default class Collections extends React.Component {
     this.setState({expanded: newExpanded? panel : false});
   };
 
+
+  handleClick = [
+    () => {this.props.callBack(<Users/>);},
+    () => {this.props.callBack(<Bikes/>);},
+    () => {this.props.callBack(<Dockers/>);},
+    () => {this.props.callBack(<Usages/>);},
+    () => {this.props.callBack(<Payments/>);},
+    () => {this.props.callBack(<Transactions/>);},
+    () => {this.props.callBack(<Errors/>);},
+  ];
+
   tabs = ["Users", "Bikes", "Dockers", "Usages", "Payments", "Transactions", "Errors"];
 
   render(){
@@ -92,7 +110,7 @@ export default class Collections extends React.Component {
           <ExpansionPanelDetails>
           <List>
               {this.tabs.map((text, index) => (
-                <ListItem button key={text}>
+                <ListItem button key={text} onClick={this.handleClick[index]}>
                   <ListItemIcon> 
                     {
                       index === 0 ? <PersonIcon/> : null

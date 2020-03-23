@@ -55,6 +55,7 @@ export default class Dashboard extends React.Component {
     super(props);
     this.state={
       open: false,
+      selectedTab: <Bikes />
     };
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
@@ -66,6 +67,10 @@ export default class Dashboard extends React.Component {
 
   handleDrawerClose = () => {
     this.setState({open:false});
+  };
+
+  handleClick = (component) => {
+    this.setState({selectedTab:component});
   };
 
   render() {
@@ -92,13 +97,13 @@ export default class Dashboard extends React.Component {
             <ChevronLeftIcon />
           </IconButton>
           </div>
-          <Collections/>
+          <Collections callBack={this.handleClick} />
           <Analytics />
         </Drawer>
         <main
           style={this.state.open ? classes.contentShift : classes.content}
         >
-          <Usages />
+          {this.state.selectedTab}
         </main>
       </div>
     );
