@@ -10,6 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Dockers from './Collections/components/Dockers';
+import Bikes from './Collections/components/Bikes';
+import Usages from './Collections/components/Usages';
 //import Usages from './Collections/components/Usages';
 
 
@@ -96,7 +98,7 @@ export default class Dashboard extends React.Component {
         <main
           style={this.state.open ? classes.contentShift : classes.content}
         >
-          <Dockers />
+          <Usages />
         </main>
       </div>
     );
