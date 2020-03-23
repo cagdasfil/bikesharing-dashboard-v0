@@ -1,109 +1,111 @@
 import React from 'react';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Database from './Database';
+import Collections from './Collections';
 import Analytics from './Analytics';
-import Bikes from './components/Bikes';
+//import Bikes from './Collections/components/Bikes';
 
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Dockers from './Collections/components/Dockers';
+import Bikes from './Collections/components/Bikes';
+import Usages from './Collections/components/Usages';
+//import Usages from './Collections/components/Usages';
+
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  },
-}));
-
-export default function Dashboard() {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
+const classes = {
+    root: {
+      display: 'flex',
+    },
+    hide: {
+      display: 'none',
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+    drawerPaper: {
+      width: drawerWidth,
+    },
+    drawerHeader: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'flex-end',
+      padding: "0px 8px",
+    },
+    content: {
+      flexGrow: 1,
+      padding: "24px",
+      marginLeft: -drawerWidth,
+    },
+    contentShift: {
+      marginLeft: 0,
+      flexGrow: 1,
+      padding: "24px",
+    },
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
+export default class Dashboard extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state={
+      open: false,
+      selectedTab: <Bikes />
+    };
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+    this.handleDrawerClose = this.handleDrawerClose.bind(this);
+  }
+
+  handleDrawerOpen = () => {
+    this.setState({open:true});
   };
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <div className={classes.drawerHeader}>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          //edge="start"
-          className={open && classes.hide}
-        >
-          <ChevronRightIcon />
-        </IconButton>
-      </div>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-        </IconButton>
+  handleDrawerClose = () => {
+    this.setState({open:false});
+  };
+
+  handleClick = (component) => {
+    this.setState({selectedTab:component});
+  };
+
+  render() {
+    return (
+      <div style={classes.root}>
+        <CssBaseline />
+        <div style={classes.drawerHeader}>
+          <IconButton
+            onClick={this.handleDrawerOpen}
+            edge="start"
+            style={this.state.open? classes.hide : null}
+          >
+            <ChevronRightIcon />
+          </IconButton>
         </div>
-        <Database/>
-        <Analytics />
-      </Drawer>
-      <main
-        className={clsx(classes.content, {
-        [classes.contentShift]: open,
-        })}
-      >
-        <Bikes />
-      </main>
-    </div>
-  );
+        <Drawer
+          style={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={this.state.open}
+        >
+          <div style={classes.drawerHeader}>
+          <IconButton onClick={this.handleDrawerClose}>
+            <ChevronLeftIcon />
+          </IconButton>
+          </div>
+          <Collections callBack={this.handleClick} />
+          <Analytics callBack={this.handleClick}/>
+        </Drawer>
+        <main
+          style={this.state.open ? classes.contentShift : classes.content}
+        >
+          {this.state.selectedTab}
+        </main>
+      </div>
+    );
+  }
 }

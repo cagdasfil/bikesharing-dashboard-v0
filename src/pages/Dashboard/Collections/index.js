@@ -3,15 +3,27 @@ import { withStyles } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 
-import PieChartIcon from '@material-ui/icons/PieChart';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import TimelineIcon from '@material-ui/icons/Timeline';
+import StorageIcon from '@material-ui/icons/Storage';
+import PersonIcon from '@material-ui/icons/Person';
+import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { FaBicycle } from 'react-icons/fa';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import ErrorIcon from '@material-ui/icons/Error';
+import Usages from "./components/Usages";
+import Users from './components/Users';
+import Bikes from './components/Bikes';
+import Dockers from './components/Dockers';
+import Payments from './components/Payments';
+import Transactions from './components/Transactions';
+import Errors from './components/Errors';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -54,8 +66,8 @@ const ExpansionPanelDetails = withStyles(theme => ({
   },
 }))(MuiExpansionPanelDetails);
 
-export default class Analytics extends React.Component {
-
+export default class Collections extends React.Component {
+  
   constructor(props){
     super(props);
     this.state = {
@@ -68,7 +80,18 @@ export default class Analytics extends React.Component {
     this.setState({expanded: newExpanded? panel : false});
   };
 
-  tabs = ['Pie Charts', 'Bar Graphs', 'Timelines'];
+
+  handleClick = [
+    () => {this.props.callBack(<Users/>);},
+    () => {this.props.callBack(<Bikes/>);},
+    () => {this.props.callBack(<Dockers/>);},
+    () => {this.props.callBack(<Usages/>);},
+    () => {this.props.callBack(<Payments/>);},
+    () => {this.props.callBack(<Transactions/>);},
+    () => {this.props.callBack(<Errors/>);},
+  ];
+
+  tabs = ["Users", "Bikes", "Dockers", "Usages", "Payments", "Transactions", "Errors"];
 
   render(){
     return (
@@ -79,24 +102,36 @@ export default class Analytics extends React.Component {
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <ListItemIcon>
-              <BarChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Analytics"/>
+          <ListItemIcon>
+            <StorageIcon/>
+          </ListItemIcon>
+            <ListItemText primary="Collections"/>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <List>
+          <List>
               {this.tabs.map((text, index) => (
-                <ListItem button key={text}>
+                <ListItem button key={text} onClick={this.handleClick[index]}>
                   <ListItemIcon> 
                     {
-                      index === 0 ? <PieChartIcon/> : null
+                      index === 0 ? <PersonIcon/> : null
                     }
                     {
-                      index === 1 ? <BarChartIcon/> : null
+                      index === 1 ? <FaBicycle size={25}/> : null
                     }
                     {
-                      index === 2 ? <TimelineIcon/> : null
+                      index === 2 ? <LocationOnIcon/> : null
+                    }
+                    {
+                      index === 3 ? <DirectionsBikeIcon/> : null
+                    }
+                    {
+                      index === 4 ? <MonetizationOnIcon/> : null
+                    }
+                    {
+                      index === 5 ? <SwapHorizIcon/> : null
+                    }
+                    {
+                      index === 6 ? <ErrorIcon/> : null
                     }
                   </ListItemIcon>
                   <ListItemText primary={text} />
