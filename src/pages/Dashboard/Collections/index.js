@@ -59,61 +59,70 @@ const ExpansionPanelDetails = withStyles(theme => ({
   },
 }))(MuiExpansionPanelDetails);
 
-export default function Collections() {
-  const [expanded, setExpanded] = React.useState('panel1');
+export default class Collections extends React.Component {
+  
+  constructor(props){
+    super(props);
+    this.state = {
+      expanded: "panel1"
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
 
-  const handleChange = panel => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : false);
+  handleChange = panel => (event, newExpanded) => {
+    this.setState({expanded: newExpanded? panel : false});
   };
 
-  const tabs = ["Users", "Bikes", "Dockers", "Usages", "Payments", "Transactions", "Errors"];
+  tabs = ["Users", "Bikes", "Dockers", "Usages", "Payments", "Transactions", "Errors"];
 
-  return (
-    <div>
-      <ExpansionPanel square expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-        <ListItemIcon>
-          <StorageIcon/>
-        </ListItemIcon>
-          <ListItemText primary="Collections"/>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-        <List>
-            {tabs.map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon> 
-                  {
-                    index === 0 ? <PersonIcon/> : null
-                  }
-                  {
-                    index === 1 ? <FaBicycle size={25}/> : null
-                  }
-                  {
-                    index === 2 ? <LocationOnIcon/> : null
-                  }
-                  {
-                    index === 3 ? <DirectionsBikeIcon/> : null
-                  }
-                  {
-                    index === 4 ? <MonetizationOnIcon/> : null
-                  }
-                  {
-                    index === 5 ? <SwapHorizIcon/> : null
-                  }
-                  {
-                    index === 6 ? <ErrorIcon/> : null
-                  }
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-    </div>
-  );
+  render(){
+    return (
+      <div>
+        <ExpansionPanel square expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+          <ListItemIcon>
+            <StorageIcon/>
+          </ListItemIcon>
+            <ListItemText primary="Collections"/>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+          <List>
+              {this.tabs.map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon> 
+                    {
+                      index === 0 ? <PersonIcon/> : null
+                    }
+                    {
+                      index === 1 ? <FaBicycle size={25}/> : null
+                    }
+                    {
+                      index === 2 ? <LocationOnIcon/> : null
+                    }
+                    {
+                      index === 3 ? <DirectionsBikeIcon/> : null
+                    }
+                    {
+                      index === 4 ? <MonetizationOnIcon/> : null
+                    }
+                    {
+                      index === 5 ? <SwapHorizIcon/> : null
+                    }
+                    {
+                      index === 6 ? <ErrorIcon/> : null
+                    }
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      </div>
+    );
+  }
 }
