@@ -54,49 +54,58 @@ const ExpansionPanelDetails = withStyles(theme => ({
   },
 }))(MuiExpansionPanelDetails);
 
-export default function Analytics() {
-  const [expanded, setExpanded] = React.useState('panel1');
+export default class Analytics extends React.Component {
 
-  const handleChange = panel => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : false);
+  constructor(props){
+    super(props);
+    this.state = {
+      expanded: "panel1"
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange = panel => (event, newExpanded) => {
+    this.setState({expanded: newExpanded? panel : false});
   };
 
-  const tabs = ['Pie Charts', 'Bar Graphs', 'Timelines'];
+  tabs = ['Pie Charts', 'Bar Graphs', 'Timelines'];
 
-  return (
-    <div>
-      <ExpansionPanel square expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <ListItemIcon>
-            <BarChartIcon />
-          </ListItemIcon>
-          <ListItemText primary="Analytics"/>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <List>
-            {tabs.map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon> 
-                  {
-                    index === 0 ? <PieChartIcon/> : null
-                  }
-                  {
-                    index === 1 ? <BarChartIcon/> : null
-                  }
-                  {
-                    index === 2 ? <TimelineIcon/> : null
-                  }
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-    </div>
-  );
+  render(){
+    return (
+      <div>
+        <ExpansionPanel square expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <ListItemIcon>
+              <BarChartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Analytics"/>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <List>
+              {this.tabs.map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon> 
+                    {
+                      index === 0 ? <PieChartIcon/> : null
+                    }
+                    {
+                      index === 1 ? <BarChartIcon/> : null
+                    }
+                    {
+                      index === 2 ? <TimelineIcon/> : null
+                    }
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      </div>
+    );
+  }
 }
