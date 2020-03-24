@@ -1,173 +1,141 @@
 import React, { useState } from "react";
-import {Map, Marker, Popup, TileLayer, Polygon } from "react-leaflet";
+
 import { Icon } from "leaflet";
 import { Button, Form } from "react-bootstrap";
 import { Container, Row, Col } from 'reactstrap';
+import {Map, Marker, Popup, TileLayer, Polygon } from "react-leaflet";
+import Draw from 'leaflet-draw';
 import "./map.css"
 import { render } from "@testing-library/react";
+import L from 'leaflet';
+
+
+
+console.log("WINDOW", window)
+
+const blueIcon = L.icon({ iconUrl: 'https://calendar.duke.edu/assets/v2016/icon-login.svg' });
+const greenIcon = L.icon({ iconUrl: 'http://readyhedgeltd.com/wp-content/uploads/2016/09/home_icon-20.png' });
+const redIcon = L.icon({ iconUrl: 'http://krimsonsalon.com/img/icon_address.png' });
+const orangeIcon = L.icon({ iconUrl: 'https://ak1.ostkcdn.com//img/mxc/sn_review_star_full.svg' });
+
+const events = [{
+	title:'Sport Thing',
+  description: 'the biggest sport thing ever',
+  type: 'Sports',
+  lat: 42.616841,
+  lng: -70.671173,
+  id: 'CAT',
+},
+{
+	title:'Town Hall Meeting',
+  description: 'Come one come all',
+  type: 'Government',
+  lat: 42.619281,
+  lng: -70.669735,
+  id: 'DOG',
+}]
 
 export default class Mapping extends React.Component{
 
 
-  constructor(props){
-    super(props);
-    this.state={
-      bi: [39.8909236,32.7777734],
-      rowsPerPage:10,
-      zone:[],
-      checkZone: true
-    };
-    this.handleZoneData = this.handleZoneData.bind(this);
-  }
-
-  //const [zone, setZone] = React.useState([]);
-  
-  //const [newZone, setNewZone] = React.useState([]);
-
-
-
-
-
-
-
-
-
-  
-
-  handleZoneData = (data) => {
-    let zoneData = []
-    let dgn = []
-    for(var i in data){
-      for(var j = 0 ; j< data[i].polygon.geometry.coordinates[0].length ; j++){
-        dgn.push([data[i].polygon.geometry.coordinates[0][j][1],data[i].polygon.geometry.coordinates[0][j][0]])
-      }
-      zoneData.push(dgn)
-      dgn = []
+  componentDidMount() {
+    const map = this.leafletMap.leafletElement;
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+    const drawControl = new L.Control.Draw({
+    position: 'topright',
+    draw: {
+      polyline: true,
+      polygon: true,
+      circle: false,
+      marker: true,
+    },
+    edit: {
+      featureGroup: drawnItems,
+      remove: true,
+    },
+  });
+  map.addControl(drawControl);
+  map.on(L.Draw.Event.CREATED, (e) => {
+    const type = e.layerType;
+    const layer = e.layer;
+    if (type === 'marker') {
+      layer.bindPopup('A popup!');
     }
-    this.setState({zone: zoneData});
-    this.setState({checkZone: false});
-  };
-
-  
-
-
-  /*if (checkZone === true){
-
-    fetch('http://35.234.156.204/zones')
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-          this.handleZoneData(data);
-            //console.log(data[0].coordinates.geometry)
+    console.log('LAYER ADDED:', layer)
+    if (layer.getRadius) {
+			console.log('It\'s a circle');
+    }
+    drawnItems.addLayer(layer);
+    
+    console.log('GEO JSONNNN', drawnItems.toGeoJSON());
+    console.log('GET THEM LAYERS', drawnItems.getLayers());
+  });
+  map.on(L.Draw.Event.EDITED, (e) => {
+    const layers = e.layers;
+    let countOfEditedLayers = 0;
+    console.log('LAYER EDITED:', layers)
+    layers.eachLayer((layer) => {
+      countOfEditedLayers++;
     });
-    this.setState({checkZone: false});
-  }*/
-  
-
-  getData(){
-    fetch('http://35.234.156.204/zones')
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-          this.handleZoneData(data);
-    });
+   });
   }
-
-  componentWillMount(){
-    this.getData();
+  
+  handleClick(e) {
+  	console.log(e);
   }
+  
+  getEventIcon(type) {
+  switch (type) {
+    case 'Sports':
+      return greenIcon;
+    case 'Music':
+      return blueIcon;
+    case 'Government':
+      return redIcon;
+    default:
+      return orangeIcon;
+  	}
+	}
 
-
-
-  
-  
-  
-  
-  render(){
+  render() {
     return (
-      
-      <div className="Login">
-      
-        
-        <Map center={[39.8909236,32.7777734]} zoom={10}>
-          
+      <div className="Mapping">
+        <Map
+          ref={m => { this.leafletMap = m; }}
+          center={[39.8909236,32.7777734]} zoom={15}
+        >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
 
-          <Marker position={this.state.bi} ></Marker>
-          <Polygon positions={[this.state.zone]} color='#0099CC' ></Polygon>
-        
-          <Polygon positions={[[39.8909236,32.7777734],[39.8909236,32.7777734],[39.8909236,32.7777734]]} color='#660033'></Polygon>
-          
-          
+          {events.map(({ id, lat, lng, title, description, type }) => (
+            <Marker
+              id={id}
+              key={id}
+              position={[lat, lng]}
+              icon={this.getEventIcon(type)}
+              onClick={this.handleClick}
+            >
+              <Popup>
+                <span>
+                  {title}<br />
+                  {description}
+                </span>
+              </Popup>
+            </Marker>
+          ))}
         </Map>
-        
-        <div className="Form">
-          <form >
-            <div >
-              <div>Coordinates</div>
-              <div className="Setting">
-              <Form.Label className="FormLabels">x1 : </Form.Label>
-              <Form.Control className="FormBoxes"
-                
-              />
-              <Form.Label className="FormLabels">y1 : </Form.Label>
-              <Form.Control className="FormBoxes"
-                
-              />
-              <Button className ="SetMargin" type="submit">Set</Button>
-              </div>
-              <div className="Setting">
-              <Form.Label className="FormLabels">x2 : </Form.Label>
-              <Form.Control className="FormBoxes"
-                
-              />
-                
-              <Form.Label className="FormLabels">y2 : </Form.Label>
-              <Form.Control className="FormBoxes"
-              
-              />
-              </div>
-              <div className="Setting"> 
-              <Form.Label className="FormLabels">x3 : </Form.Label>
-              <Form.Control className="FormBoxes"
-              
-              />
-              <Form.Label className="FormLabels">y3 : </Form.Label>
-              <Form.Control className="FormBoxes"
-              
-              />
-              </div>
-              <div className="Setting">
-              <Form.Label className="FormLabels">x4 : </Form.Label>
-              <Form.Control className="FormBoxes"
-              
-              />
-              <Form.Label className="FormLabels">y4 : </Form.Label>
-              <Form.Control className="FormBoxes"
-              
-              />
-              </div>
-              <Button className ="SetMargin" type="button">Set</Button>
-            </div>
-              
-              
-          
-          </form>
-        </div>
-
-        
-        
-    </div>
-    
+      </div>
 
     );
   }
 }
+
+
+
+
 
 
 //<Button className ="SetMargin" type="submit">Set</Button>
