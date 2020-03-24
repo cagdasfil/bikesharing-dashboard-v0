@@ -8,15 +8,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
   
-  export default class Dockers extends React.Component {
+  export default class Zones extends React.Component {
     constructor(props){
       super(props);
       this.state={
         page:0,
         rowsPerPage:10,
-        dockers:[]
+        zones:[]
       };
-      this.handleDockerData = this.handleDockerData.bind(this);
+      this.handleZoneData = this.handleZoneData.bind(this);
     }
     
     classes = {
@@ -33,8 +33,8 @@ import TableRow from '@material-ui/core/TableRow';
         label: 'id',
         minWidth: 100
       },
-      { id: 'dockerName',
-        label: 'dockerName',
+      { id: 'name',
+        label: 'name',
         minWidth: 50 
       },
       {
@@ -76,27 +76,27 @@ import TableRow from '@material-ui/core/TableRow';
         });
     }
 
-    handleDockerData = (data) => {
+    handleZoneData = (data) => {
         let formattedData = []
         for(var i in data){
             formattedData.push({ id: data[i]._id,
-                                 dockerName: data[i].dockerName,
+                                 name: data[i].name,
                                  address: data[i].address,
-                                 coordinates: this.handleCoordinateData(data[i].coordinates.geometry.coordinates),
+                                 coordinates: this.handleCoordinateData(data[i].polygon.geometry.coordinates),
                                  createdAt: data[i].createdAt,
                                  updatedAt: data[i].updatedAt,
             });
         }
-        this.setState({dockers:formattedData});
+        this.setState({zones:formattedData});
     };
 
     getData(){
-      fetch('http://35.234.156.204/dockers')
+      fetch('http://35.234.156.204/zones')
           .then((response) => {
               return response.json();
           })
           .then((data) => {
-              this.handleDockerData(data);
+              this.handleZoneData(data);
       });
     }
 
@@ -123,7 +123,7 @@ import TableRow from '@material-ui/core/TableRow';
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.state.dockers.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map(row => {
+                {this.state.zones.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map(row => {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                       {this.columns.map(column => {
@@ -143,7 +143,7 @@ import TableRow from '@material-ui/core/TableRow';
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={this.state.dockers.length}
+            count={this.state.zones.length}
             rowsPerPage={this.state.rowsPerPage}
             page={this.state.page}
             onChangePage={this.handleChangePage}

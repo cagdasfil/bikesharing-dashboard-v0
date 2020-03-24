@@ -20,7 +20,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 import Usages from "./components/Usages";
 import Users from './components/Users';
 import Bikes from './components/Bikes';
-import Dockers from './components/Dockers';
+import Zones from './components/Zones';
 import Payments from './components/Payments';
 import Transactions from './components/Transactions';
 import Errors from './components/Errors';
@@ -84,14 +84,14 @@ export default class Collections extends React.Component {
   handleClick = [
     () => {this.props.callBack(<Users/>);},
     () => {this.props.callBack(<Bikes/>);},
-    () => {this.props.callBack(<Dockers/>);},
+    () => {this.props.callBack(<Zones/>);},
     () => {this.props.callBack(<Usages/>);},
     () => {this.props.callBack(<Payments/>);},
     () => {this.props.callBack(<Transactions/>);},
     () => {this.props.callBack(<Errors/>);},
   ];
 
-  tabs = ["Users", "Bikes", "Dockers", "Usages", "Payments", "Transactions", "Errors"];
+  tabs = ["Users", "Bikes", "Zones", "Usages", "Payments", "Transactions", "Errors"];
 
   render(){
     return (
