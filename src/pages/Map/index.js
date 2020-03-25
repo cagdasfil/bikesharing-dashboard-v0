@@ -9,6 +9,7 @@ import "./map.css"
 import { render } from "@testing-library/react";
 import L from 'leaflet';
 
+
 console.log("WINDOW", window)
 
 const blueIcon = L.icon({ iconUrl: 'https://calendar.duke.edu/assets/v2016/icon-login.svg' });
@@ -48,6 +49,27 @@ var data = [{
       ]
     }}]
 
+    
+  var customPopup = "<div>"+
+                      "<form>"+
+                        "<div>"+
+                          "<div>"+
+                            "Name :<input/>"+
+                            "Adress :<input/>"+
+                            "<Button type='submit'>Insert Zone</Button>"+
+                          "</div>"+
+                        "</div>"+
+                      "</form>"+
+                    "</div>";
+  
+  var customOptions =
+    {
+    'maxWidth': '150',
+    'width': '50',
+    'className' : 'popupCustom'
+    }
+
+    
 export default class Mapping extends React.Component{
 
 
@@ -95,6 +117,8 @@ export default class Mapping extends React.Component{
     });
   }
 
+  
+
 
   componentDidMount() {
     this.getData();
@@ -109,63 +133,73 @@ export default class Mapping extends React.Component{
     
     //map.addLayer(this.state.zone);
     const drawControl = new L.Control.Draw({
-    position: 'topright',
-    draw: {
-      polyline: true,
-      polygon: true,
-      circle: false,
-      marker: true,
-    },
-    edit: {
-      featureGroup: drawnItems,
-      remove: true,
-    },
-  });
-  
-
-  
-
-  map.addControl(drawControl);
-
-
-  map.on(L.Draw.Event.DRAWSTART, (e) => {
-    for(var i = 0 ; i< this.state.zone.length ; i++) {
-    var geojsonLayer = L.geoJson(this.state.zone[i]);
-    geojsonLayer.getLayers()[0].addTo(drawnItems);    
-  }});
-
-  map.on(L.Draw.Event.CREATED, (e) => {
-
-    
-
-    const type = e.layerType;
-    const layer = e.layer;
-    if (type === 'marker') {
-      layer.bindPopup('A popup!');
-    }
-    console.log('LAYER ADDED:', layer)
-    
-    if (layer.getRadius) {
-			console.log('It\'s a circle');
-    }
-
-    
-    
-    drawnItems.addLayer(layer);
-    
-    console.log('GEO JSONNNN', drawnItems.toGeoJSON());
-    console.log('GET THEM LAYERS', drawnItems.getLayers());
-    console.log('DOGİ:', this.state.zone)
-    
-  });
-  map.on(L.Draw.Event.EDITED, (e) => {
-    const layers = e.layers;
-    let countOfEditedLayers = 0;
-    console.log('LAYER EDITED:', layers)
-    layers.eachLayer((layer) => {
-      countOfEditedLayers++;
+      position: 'topright',
+      draw: {
+        polyline: true,
+        polygon: true,
+        circle: false,
+        marker: true,
+      },
+      edit: {
+        featureGroup: drawnItems,
+        remove: true,
+      },
     });
-   });
+  
+
+  
+
+    map.addControl(drawControl);
+
+
+    map.on(L.Draw.Event.DRAWSTART, (e) => {
+      for(var i = 0 ; i< this.state.zone.length ; i++) {
+      var geojsonLayer = L.geoJson(this.state.zone[i]);
+      geojsonLayer.getLayers()[0].addTo(drawnItems);   
+      
+      
+    }});
+
+    map.on(L.Draw.Event.CREATED, (e) => {
+
+    
+
+      const type = e.layerType;
+      const layer = e.layer;
+      if (type === 'marker') {
+        layer.bindPopup('<object data="http://www.youtube.com/embed/W7qWa52k-nE" width="560" height="315"></object>', {
+          maxWidth : 200
+      });
+      }
+
+      
+      drawnItems.bindPopup(customPopup,customOptions);
+      
+      console.log('LAYER ADDED:', layer)
+
+      
+      if (layer.getRadius) {
+        console.log('It\'s a circle');
+      }
+
+      
+      
+      drawnItems.addLayer(layer);
+      
+      console.log('GEO JSONNNN', drawnItems.toGeoJSON());
+      console.log('GET THEM LAYERS', drawnItems.getLayers());
+      console.log('DOGİ:', drawnItems)
+      
+    });
+
+    map.on(L.Draw.Event.EDITED, (e) => {
+      const layers = e.layers;
+      let countOfEditedLayers = 0;
+      console.log('LAYER EDITED:', layers)
+      layers.eachLayer((layer) => {
+        countOfEditedLayers++;
+      });
+    });
   }
   
   handleClick(e) {
@@ -184,7 +218,8 @@ export default class Mapping extends React.Component{
       return orangeIcon;
   	}
 	}
-//[39.8909236,32.7777734]
+
+
   render() {
     return (
       <div className="Mapping">
@@ -216,23 +251,7 @@ export default class Mapping extends React.Component{
             </Marker>
           ))}
         </Map>
-        <div className="Form">
-          <form >
-            <div >
-              <div className="Setting">
-              <Form.Label className="FormLabels">Name : </Form.Label>
-              <Form.Control className="FormBoxes"
-                
-              />
-              <Form.Label className="FormLabels">Adress : </Form.Label>
-              <Form.Control className="FormBoxes2"
-                
-              />
-              <Button className ="SetMargin" type="submit">Insert Zone</Button>
-              </div>              
-            </div>                   
-          </form>
-        </div>
+        
       </div>
 
     );
