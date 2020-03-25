@@ -1,5 +1,5 @@
 .leaflet-container{
-    right: 7%;
+    right: 2%;
     width: 50%;
     height: 50vh;
 }
@@ -19,6 +19,14 @@
   .FormBoxes {
     margin: 0vh 0vh;
     width: 10vh;
+    padding-left: 1vh;
+    border-radius: 1vh;
+    height: 3vh;
+  }
+
+  .FormBoxes2 {
+    margin: 0vh 0vh;
+    width: 25vh;
     padding-left: 1vh;
     border-radius: 1vh;
     height: 3vh;

@@ -9,8 +9,6 @@ import "./map.css"
 import { render } from "@testing-library/react";
 import L from 'leaflet';
 
-
-
 console.log("WINDOW", window)
 
 const blueIcon = L.icon({ iconUrl: 'https://calendar.duke.edu/assets/v2016/icon-login.svg' });
@@ -35,13 +33,81 @@ const events = [{
   id: 'DOG',
 }]
 
+var data = [{
+  "type": "Feature",
+  "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [2.504410743713379,44.28253972334941],
+          [2.504410743713379,44.28929846767132],
+          [2.5168561935424805,44.28929846767132],
+          [2.5168561935424805,44.28253972334941],
+          [2.504410743713379,44.28253972334941]
+        ]
+      ]
+    }}]
+
 export default class Mapping extends React.Component{
 
 
+  constructor(props){
+    super(props);
+    this.state={
+      bi: [39.8909236,32.7777734],
+      rowsPerPage:10,
+      zone:[],
+      checkZone: true,
+      geojsonLayer: []
+    };
+    this.handleZoneData = this.handleZoneData.bind(this);
+  }
+
+  
+
+  handleZoneData = (data) => {
+    let zoneData = []
+    let dgn = []
+    for(var i in data){
+      /*for(var j = 0 ; j< data[i].polygon.geometry.coordinates[0].length ; j++){
+        dgn.push([data[i].polygon.geometry.coordinates[0][j][1],data[i].polygon.geometry.coordinates[0][j][0]])
+      }*/
+      dgn.push([data[i].polygon])
+      //zoneData.push(dgn)
+
+      //dgn = []
+    }
+    
+    this.setState({zone: dgn});
+    console.log('1--1:', this.state.zone)
+    //this.setState({zone: zoneData});
+    this.setState({checkZone: false});
+  };
+
+
+  getData(){
+    fetch('http://35.234.156.204/zones')
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+          this.handleZoneData(data);
+    });
+  }
+
+
   componentDidMount() {
+    this.getData();
     const map = this.leafletMap.leafletElement;
     var drawnItems = new L.FeatureGroup();
+    
+    //console.log('DOGİ:', drawnItems)
     map.addLayer(drawnItems);
+
+    
+
+    
+    //map.addLayer(this.state.zone);
     const drawControl = new L.Control.Draw({
     position: 'topright',
     draw: {
@@ -55,21 +121,42 @@ export default class Mapping extends React.Component{
       remove: true,
     },
   });
+  
+
+  
+
   map.addControl(drawControl);
+
+
+  map.on(L.Draw.Event.DRAWSTART, (e) => {
+    for(var i = 0 ; i< this.state.zone.length ; i++) {
+    var geojsonLayer = L.geoJson(this.state.zone[i]);
+    geojsonLayer.getLayers()[0].addTo(drawnItems);    
+  }});
+
   map.on(L.Draw.Event.CREATED, (e) => {
+
+    
+
     const type = e.layerType;
     const layer = e.layer;
     if (type === 'marker') {
       layer.bindPopup('A popup!');
     }
     console.log('LAYER ADDED:', layer)
+    
     if (layer.getRadius) {
 			console.log('It\'s a circle');
     }
+
+    
+    
     drawnItems.addLayer(layer);
     
     console.log('GEO JSONNNN', drawnItems.toGeoJSON());
     console.log('GET THEM LAYERS', drawnItems.getLayers());
+    console.log('DOGİ:', this.state.zone)
+    
   });
   map.on(L.Draw.Event.EDITED, (e) => {
     const layers = e.layers;
@@ -97,7 +184,7 @@ export default class Mapping extends React.Component{
       return orangeIcon;
   	}
 	}
-
+//[39.8909236,32.7777734]
   render() {
     return (
       <div className="Mapping">
@@ -109,6 +196,8 @@ export default class Mapping extends React.Component{
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
+
+          
 
           {events.map(({ id, lat, lng, title, description, type }) => (
             <Marker
@@ -127,6 +216,23 @@ export default class Mapping extends React.Component{
             </Marker>
           ))}
         </Map>
+        <div className="Form">
+          <form >
+            <div >
+              <div className="Setting">
+              <Form.Label className="FormLabels">Name : </Form.Label>
+              <Form.Control className="FormBoxes"
+                
+              />
+              <Form.Label className="FormLabels">Adress : </Form.Label>
+              <Form.Control className="FormBoxes2"
+                
+              />
+              <Button className ="SetMargin" type="submit">Insert Zone</Button>
+              </div>              
+            </div>                   
+          </form>
+        </div>
       </div>
 
     );
