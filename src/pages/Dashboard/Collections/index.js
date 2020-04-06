@@ -29,7 +29,7 @@ import Reports from './components/Reports';
 
 const ExpansionPanel = withStyles({
   root: {
-    border: '1px solid rgba(0, 0, 0, .125)',
+    //border: '1px solid rgba(0, 0, 0, .125)',
     boxShadow: 'none',
     '&:not(:last-child)': {
       borderBottom: 0,
@@ -38,7 +38,9 @@ const ExpansionPanel = withStyles({
       display: 'none',
     },
     '&$expanded': {
-      margin: 'auto',
+      //margin: 'auto',
+      margin:0,
+      padding:0
     },
   },
   expanded: {},
@@ -46,27 +48,45 @@ const ExpansionPanel = withStyles({
 
 const ExpansionPanelSummary = withStyles({
   root: {
-    backgroundColor: 'rgba(0, 0, 0, .03)',
-    borderBottom: '1px solid rgba(0, 0, 0, .125)',
-    marginBottom: -1,
-    minHeight: 56,
+    backgroundColor:"#336699",
+
+    //borderBottom: '1px solid rgba(0, 0, 0, .125)',
+    //marginBottom: -1,
+    //minHeight: 56,
+    padding:10,
+    margin:0,
     '&$expanded': {
-      minHeight: 56,
+      height:0,
+      padding:10,
+      margin:0
     },
   },
   content: {
+    padding:0,
     '&$expanded': {
-      margin: '12px 0',
+      //margin: '6px 0',
+      padding:0
     },
+    color:"lightgray"
   },
-  expanded: {},
+  expanded: {
+
+  },
 })(MuiExpansionPanelSummary);
 
 const ExpansionPanelDetails = withStyles(theme => ({
   root: {
-    padding: theme.spacing(2),
+    backgroundColor: "#336699",
+    padding:"20 0 0 0",
+    margin:0
   },
 }))(MuiExpansionPanelDetails);
+
+const StyledListItem = withStyles(theme => ({
+  root: {
+    padding:0
+  }
+}))(ListItem);
 
 export default class Collections extends React.Component {
   
@@ -101,47 +121,47 @@ export default class Collections extends React.Component {
       <div>
         <ExpansionPanel square expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
           <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMoreIcon style={{color:"lightgray"}} />}
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-          <ListItemIcon>
-            <StorageIcon/>
-          </ListItemIcon>
+            <ListItemIcon>
+              <StorageIcon style={{color:"lightgray"}} />
+            </ListItemIcon>
             <ListItemText primary="Collections"/>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
           <List>
               {this.tabs.map((text, index) => (
-                <ListItem button key={text} onClick={this.handleClick[index]}>
+                <StyledListItem button key={text} onClick={this.handleClick[index]}>
                   <ListItemIcon> 
                     {
-                      index === 0 ? <PersonIcon/> : null
+                      index === 0 ? <PersonIcon style={{color:"lightgray"}}/> : null
                     }
                     {
-                      index === 1 ? <FaBicycle size={25}/> : null
+                      index === 1 ? <FaBicycle size={25} style={{color:"lightgray"}}/> : null
                     }
                     {
-                      index === 2 ? <LocationOnIcon/> : null
+                      index === 2 ? <LocationOnIcon style={{color:"lightgray"}}/> : null
                     }
                     {
-                      index === 3 ? <DirectionsBikeIcon/> : null
+                      index === 3 ? <DirectionsBikeIcon style={{color:"lightgray"}}/> : null
                     }
                     {
-                      index === 4 ? <MonetizationOnIcon/> : null
+                      index === 4 ? <MonetizationOnIcon style={{color:"lightgray"}}/> : null
                     }
                     {
-                      index === 5 ? <SwapHorizIcon/> : null
+                      index === 5 ? <SwapHorizIcon style={{color:"lightgray"}}/> : null
                     }
                     {
-                      index === 6 ? <ErrorIcon/> : null
+                      index === 6 ? <ErrorIcon style={{color:"lightgray"}}/> : null
                     }
                     {
-                      index === 7 ? <DescriptionIcon/> : null
+                      index === 7 ? <DescriptionIcon style={{color:"lightgray"}}/> : null
                     }
                   </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
+                  <ListItemText primary={text} style={{color:"lightgray"}} />
+                </StyledListItem>
               ))}
             </List>
           </ExpansionPanelDetails>

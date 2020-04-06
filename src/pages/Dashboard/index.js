@@ -9,43 +9,57 @@ import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Bikes from './Collections/components/Bikes';
-
+import { withStyles } from "@material-ui/core/styles";
+import clsx from 'clsx';
 
 const drawerWidth = 240;
 
-const classes = {
-    root: {
-      display: 'flex',
-    },
-    hide: {
-      display: 'none',
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-    drawerPaper: {
-      width: drawerWidth,
-    },
-    drawerHeader: {
-      display: 'flex',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-end',
-      padding: "0px 8px",
-    },
-    content: {
-      flexGrow: 1,
-      padding: "24px",
-      marginLeft: -drawerWidth,
-    },
-    contentShift: {
-      marginLeft: 0,
-      flexGrow: 1,
-      padding: "24px",
-    },
-  };
+const styles = (theme) => ({
+  root: {
+    display: 'flex',
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    color:"#336699"
+  },
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0
+  },
+  drawerPaper: {
+    width: drawerWidth,
+    backgroundColor:"#336699"
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
+});
 
-export default class Dashboard extends React.Component {
+class Dashboard extends React.Component {
 
   constructor(props){
     super(props);
@@ -70,34 +84,40 @@ export default class Dashboard extends React.Component {
   };
 
   render() {
+    const {classes} = this.props;
     return (
-      <div style={classes.root}>
+      <div className={classes.root}>
         <CssBaseline />
-        <div style={classes.drawerHeader}>
+        <div className={classes.drawerHeader}>
           <IconButton
             onClick={this.handleDrawerOpen}
             edge="start"
-            style={this.state.open? classes.hide : null}
+            className={clsx(classes.menuButton, this.state.open && classes.hide)}
           >
-            <ChevronRightIcon />
+            <ChevronRightIcon/>
           </IconButton>
         </div>
         <Drawer
-          style={classes.drawer}
+          className={classes.drawer}
           variant="persistent"
           anchor="left"
           open={this.state.open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
         >
-          <div style={classes.drawerHeader}>
+          <div className={classes.drawerHeader}>
           <IconButton onClick={this.handleDrawerClose}>
-            <ChevronLeftIcon />
+            <ChevronLeftIcon style={{color:"lightgray"}}/>
           </IconButton>
           </div>
           <Collections callBack={this.handleClick} />
           <Analytics callBack={this.handleClick}/>
         </Drawer>
         <main
-          style={this.state.open ? classes.contentShift : classes.content}
+          className={clsx(classes.content, {
+            [classes.contentShift]: this.state.open,
+          })}
         >
           {this.state.selectedTab}
         </main>
@@ -105,3 +125,5 @@ export default class Dashboard extends React.Component {
     );
   }
 }
+
+export default withStyles(styles, { withTheme: true })(Dashboard);
