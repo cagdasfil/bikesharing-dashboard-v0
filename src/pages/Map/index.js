@@ -75,6 +75,7 @@ export default class Mapping extends React.Component{
       addresses:[],
       ids:[],
       dataBaseZones:[],
+      delete: false,
     };
     this.handleZoneData = this.handleZoneData.bind(this);
 
@@ -171,7 +172,7 @@ export default class Mapping extends React.Component{
     function onMapClick(e) {
         popup
             .setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
             .openOn(map);
     }
 
@@ -286,7 +287,6 @@ export default class Mapping extends React.Component{
       
       console.log('GEO JSONNNN', drawnItems.toGeoJSON());
       console.log('GET THEM LAYERS', drawnItems.getLayers());
-      console.log('DOGİ:', drawnItems)
 
       var allLayer = drawnItems.toGeoJSON().features;
       var LatLng = [];
@@ -321,6 +321,12 @@ export default class Mapping extends React.Component{
       });
     });
 
+    map.on(L.Draw.Event.DELETED, (e) => {
+      console.log('DELETED', e)
+      this.setState({delete: true})
+     
+    });
+
     
   }
 
@@ -332,8 +338,21 @@ export default class Mapping extends React.Component{
     return array;
   }
   
+  deleteClick(id){
+    fetch('http://35.234.156.204/zones/' + id, {
+      method: 'DELETE',
+    })
+    .then(res => res.text()) // or res.json()
+    .then(res => console.log(res))
+    for (let i = 0; i < this.state.dataBaseZones.length; i++) {
+      if(this.state.dataBaseZones[i].id === id){
+        this.state.dataBaseZones.splice(i, 1);
+      }
+    }
+  }
   handleClick(e) {
-  	console.log('n2',e);
+    console.log('n2',e);
+    
   }
   
   getEventIcon(type) {
@@ -385,6 +404,7 @@ export default class Mapping extends React.Component{
                         <Form.Label className="FormLabels">{address}</Form.Label>
                       </div>
                       <button className ="SetMargin" type="submit" >Update Zone</button>
+                      <button className ="SetMargin" type="submit" onClick={() => this.deleteClick(id)}>Delete Zone</button>
                                     
                     </div>                   
                   </form>
@@ -420,7 +440,7 @@ export default class Mapping extends React.Component{
                         onChange={e => this.setState({address : e.target.value})}
                         />
                       </div>
-                      <button className ="SetMargin" type="submit" onClick={() => this.postData(coordinates)}>Insert Zone</button>
+                      <button className ="SetMargin" type="submit" onClick={() => this.postData(this.ters(coordinates))}>Insert Zone</button>
                                     
                     </div>                   
                   </form>
