@@ -12,6 +12,9 @@ import Bikes from './Collections/components/Bikes';
 import { withStyles } from "@material-ui/core/styles";
 import clsx from 'clsx';
 
+import {Redirect} from "react-router-dom"
+
+
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -84,6 +87,9 @@ class Dashboard extends React.Component {
   };
 
   render() {
+    if(!this.props.location.state || !this.props.location.state.jwt){
+      return <Redirect to ="/"/>;
+    } 
     const {classes} = this.props;
     return (
       <div className={classes.root}>
