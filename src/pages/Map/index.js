@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Icon } from "leaflet";
+import { Icon, LatLng } from "leaflet";
 import { Button, Form } from "react-bootstrap";
 import { Container, Row, Col } from 'reactstrap';
 import {Map, Marker, Popup, TileLayer, Polygon } from "react-leaflet";
@@ -8,6 +8,8 @@ import Draw from 'leaflet-draw';
 import "./map.css"
 import { render } from "@testing-library/react";
 import L from 'leaflet';
+import $ from 'jquery';
+window.$ = $;
 
 
 console.log("WINDOW", window)
@@ -50,24 +52,7 @@ var data = [{
     }}]
 
     
-  var customPopup = "<div>"+
-                      "<form>"+
-                        "<div>"+
-                          "<div>"+
-                            "Name :<input/>"+
-                            "Adress :<input/>"+
-                            "<Button type='submit'>Insert Zone</Button>"+
-                          "</div>"+
-                        "</div>"+
-                      "</form>"+
-                    "</div>";
   
-  var customOptions =
-    {
-    'maxWidth': '150',
-    'width': '50',
-    'className' : 'popupCustom'
-    }
 
     
 export default class Mapping extends React.Component{
@@ -79,11 +64,40 @@ export default class Mapping extends React.Component{
       bi: [39.8909236,32.7777734],
       rowsPerPage:10,
       zone:[],
-      checkZone: true,
-      geojsonLayer: []
+      gotData: false,
+      geojsonLayer: [],
+      hello:"",
+      zoneName:"hi",
+      zoneAddres:"",
+      newZone: [],
+      name: "",
+      address: "",
     };
     this.handleZoneData = this.handleZoneData.bind(this);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
+
+  handleChange(event) {
+    this.setState({zoneName: event.target.value});
+  }
+
+  handleSubmit(event) {
+    console.log(this.state.coord);
+    event.preventDefault();
+  }
+
+
+  /*handleSubmit(e){
+    e.preventDefault();
+    this.setState({
+      hello: "merhaba"
+    });
+    
+  }*/
+
+  
 
   
 
@@ -102,8 +116,10 @@ export default class Mapping extends React.Component{
     
     this.setState({zone: dgn});
     console.log('1--1:', this.state.zone)
+    console.log('2--2:', this.state.zone[0][0].geometry.coordinates)
+    this.setState({gotData: false});
     //this.setState({zone: zoneData});
-    this.setState({checkZone: false});
+      
   };
 
 
@@ -117,6 +133,54 @@ export default class Mapping extends React.Component{
     });
   }
 
+
+  postData(coord){
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: this.state.name, address: this.state.address, coordinates: [coord]})
+    };
+    console.log('deneme', requestOptions.body)
+    fetch('http://35.234.156.204/zones/insertZone', requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
+  }
+  
+
+  boxVar(){ 
+    return(
+      <div className="Form">
+          <form >
+            <div >
+              <div className="Setting">
+              <Form.Label className="FormLabels">Name : </Form.Label>
+              <Form.Control className="FormBoxes"
+                
+              />
+              <Form.Label className="FormLabels">Adress : </Form.Label>
+              <Form.Control className="FormBoxes2"
+                
+              />
+              <Button className ="SetMargin" type="submit" onClick={this.setState({hello: true})} >Insert Zone</Button>
+              </div>              
+            </div>                   
+          </form>
+        </div>)
+    
+  }
+
   
 
 
@@ -124,6 +188,15 @@ export default class Mapping extends React.Component{
     this.getData();
     const map = this.leafletMap.leafletElement;
     var drawnItems = new L.FeatureGroup();
+    var popup = L.popup();
+    function onMapClick(e) {
+        popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + "<div><Script >{this.boxVar}+Hİ</Script></div>")
+            .openOn(map);
+    }
+
+    map.on('click', onMapClick);
     
     //console.log('DOGİ:', drawnItems)
     map.addLayer(drawnItems);
@@ -138,7 +211,7 @@ export default class Mapping extends React.Component{
         polyline: true,
         polygon: true,
         circle: false,
-        marker: true,
+        marker: false,
       },
       edit: {
         featureGroup: drawnItems,
@@ -147,18 +220,22 @@ export default class Mapping extends React.Component{
     });
   
 
-  
+    
 
     map.addControl(drawControl);
 
 
     map.on(L.Draw.Event.DRAWSTART, (e) => {
-      for(var i = 0 ; i< this.state.zone.length ; i++) {
-      var geojsonLayer = L.geoJson(this.state.zone[i]);
-      geojsonLayer.getLayers()[0].addTo(drawnItems);   
-      
-      
-    }});
+      if(!this.state.gotData){
+        for(var i = 0 ; i< this.state.zone.length ; i++) {
+          
+          var geojsonLayer = L.geoJson(this.state.zone[i]);
+          console.log('LOOK',geojsonLayer)
+          geojsonLayer.getLayers()[0].addTo(drawnItems);         
+        }
+        this.setState({gotData: true});  
+      }
+      });
 
     map.on(L.Draw.Event.CREATED, (e) => {
 
@@ -171,11 +248,51 @@ export default class Mapping extends React.Component{
           maxWidth : 200
       });
       }
+      
+      var customPopup = '<div className="Form">'+
+      '<form >'+
+      '<div>'+
+      '<div className="Setting">'+
+      '<Form.Label className="FormLabels">Name : </Form.Label>'+
+      '<input type="text" ' + (true ? 'value =' + this.state.zoneName.toString():null) +' onChange={this.handleChange} />'+
+      '<Form.Label className="FormLabels">Adress : </Form.Label>'+
+      '<input type="text" value=' + this.state.zoneName.toString() +' onChange={this.handleChange} />'+
+      '<button type="button"  onclick={this.handleSubmit}>Create</button> <script>' + 'function AddRecord(){alert("Add it!");}' + '</script>' + 
+      '</div>'+
+      '</div>'+              
+      '</form>'+
+      '</div>';
+  
+      var customOptions =
+        {
+        'maxWidth': '150',
+        'width': '50',
+        'className' : 'popupCustom'
+        }
 
       
-      drawnItems.bindPopup(customPopup,customOptions);
+      ////
+
+      var container = $('<div />');
+
+// Delegate all event handling for the container itself and its contents to the container
+container.on('click', '.smallPolygonLink', function() {
+    alert("test");
+});
+
+// Insert whatever you want into the container, using whichever approach you prefer
+container.html("This is a link: <a href='#' class='smallPolygonLink'>Click me</a>.");
+container.append($('<span class="bold">').text(" :)"))
+
+// Insert the container into the popup
+drawnItems.bindPopup(container[0]);
+
+
+      //drawnItems.bindPopup(customPopup,customOptions);
+      console.log('Check:',this.state.hello)
       
       console.log('LAYER ADDED:', layer)
+      console.log('2--2', this.state.hello)
 
       
       if (layer.getRadius) {
@@ -189,7 +306,30 @@ export default class Mapping extends React.Component{
       console.log('GEO JSONNNN', drawnItems.toGeoJSON());
       console.log('GET THEM LAYERS', drawnItems.getLayers());
       console.log('DOGİ:', drawnItems)
+
+      var allLayer = drawnItems.toGeoJSON().features;
+      var LatLng = [];
+      var zones = [];
       
+      for (let i = 0; i < allLayer.length; i++) {
+        var LatLng = [];
+        if(allLayer[i].geometry.coordinates[0].length >= 3){
+          for (let j = 0; j < allLayer[i].geometry.coordinates[0].length; j++) {
+            LatLng.push([allLayer[i].geometry.coordinates[0][j][0], allLayer[i].geometry.coordinates[0][j][1]]);           
+          }
+
+          zones.push({coordinates: LatLng});
+          
+        }
+      }
+
+      this.setState({newZone: zones});
+
+
+      console.log('NEW', drawnItems.getLayerId(layer));
+      console.log('NEW787', allLayer[0]);
+
+      console.log('ZONE',this.state.newZone)
     });
 
     map.on(L.Draw.Event.EDITED, (e) => {
@@ -200,10 +340,20 @@ export default class Mapping extends React.Component{
         countOfEditedLayers++;
       });
     });
+
+    
+  }
+
+  ters(array){
+    for (let i = 0; i < array.length; i++) {
+      array[i].reverse();
+      
+    }
+    return array;
   }
   
   handleClick(e) {
-  	console.log(e);
+  	console.log('n2',e);
   }
   
   getEventIcon(type) {
@@ -217,7 +367,9 @@ export default class Mapping extends React.Component{
     default:
       return orangeIcon;
   	}
-	}
+  }
+  
+  
 
 
   render() {
@@ -233,27 +385,64 @@ export default class Mapping extends React.Component{
           />
 
           
+          
+          {this.state.newZone.map(({name, address, coordinates }) => (
+            <Polygon
+              
+              positions={this.ters(coordinates)}
 
-          {events.map(({ id, lat, lng, title, description, type }) => (
-            <Marker
-              id={id}
-              key={id}
-              position={[lat, lng]}
-              icon={this.getEventIcon(type)}
+
+              color='#000099'
               onClick={this.handleClick}
             >
               <Popup>
-                <span>
-                  {title}<br />
-                  {description}
-                </span>
+                <div className="Form">
+                  <form  >
+                    <div >
+                      <div className="Setting">
+                        <Form.Label className="FormLabels">Name: </Form.Label>
+                        <Form.Control className="FormBoxes"
+                        autoFocus
+                        onChange={e => this.setState({name : e.target.value})}
+                        />
+                      </div>
+                      
+                      <div className="Setting">
+                        <Form.Label className="FormLabels">Address: </Form.Label>
+                        <Form.Control className="FormBoxes2"
+                        onChange={e => this.setState({address : e.target.value})}
+                        />
+                      </div>
+                      <button className ="SetMargin" type="submit" onClick={() => this.postData(coordinates)}>Insert Zone</button>
+                                    
+                    </div>                   
+                  </form>
+                </div>
               </Popup>
-            </Marker>
+            </Polygon>
           ))}
         </Map>
-        
-      </div>
+        <div className="Form">
+          <form >
+            <div >
+              <div className="Setting">
+              <Form.Label className="FormLabels">Name : </Form.Label>
+              <Form.Control className="FormBoxes"
+                
+              />
+              <Form.Label className="FormLabels">Adress : </Form.Label>
+              <Form.Control className="FormBoxes2"
+                
+              />
+              <button className ="SetMargin" type="submit" onClick={this.handleSubmit}>Insert Zone</button>
+              </div>              
+            </div>                   
+          </form>
+        </div>
+      
 
+      </div>
+      
     );
   }
 }
