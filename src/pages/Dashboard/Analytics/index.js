@@ -4,6 +4,7 @@ import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -15,44 +16,19 @@ import TimelineIcon from '@material-ui/icons/Timeline';
 
 const ExpansionPanel = withStyles({
   root: {
-    //border: '1px solid rgba(0, 0, 0, .125)',
+    backgroundColor:"#336699",
     boxShadow: 'none',
-    '&:not(:last-child)': {
-      borderBottom: 0,
-    },
-    '&:before': {
-      display: 'none',
-    },
-    '&$expanded': {
-      //margin: 'auto',
-      margin:0,
-      padding:0
-    },
   },
-  expanded: {},
+  expanded: {
+
+  },
 })(MuiExpansionPanel);
 
 const ExpansionPanelSummary = withStyles({
   root: {
-    backgroundColor:"#336699",
-
-    //borderBottom: '1px solid rgba(0, 0, 0, .125)',
-    //marginBottom: -1,
-    //minHeight: 56,
-    padding:10,
-    margin:0,
-    '&$expanded': {
-      height:0,
-      padding:10,
-      margin:0
-    },
+    borderBottom: "1px solid gray"
   },
   content: {
-    padding:0,
-    '&$expanded': {
-      //margin: '6px 0',
-      padding:0
-    },
     color:"lightgray"
   },
   expanded: {
@@ -62,9 +38,8 @@ const ExpansionPanelSummary = withStyles({
 
 const ExpansionPanelDetails = withStyles(theme => ({
   root: {
-    backgroundColor: "#336699",
-    padding:"20 0 0 0",
-    margin:0
+    backgroundColor: "#4080c0",
+    borderBottom: "1px solid gray"
   },
 }))(MuiExpansionPanelDetails);
 
@@ -100,7 +75,7 @@ export default class Analytics extends React.Component {
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <ListItemIcon>
+            <ListItemIcon> 
               <BarChartIcon style={{color:"lightgray"}}/>
             </ListItemIcon>
             <ListItemText primary="Analytics"/>

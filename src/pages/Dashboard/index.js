@@ -16,7 +16,9 @@ const drawerWidth = 240;
 
 const styles = (theme) => ({
   root: {
+    minHeight: "100vh",
     display: 'flex',
+    backgroundColor: "#F7F7EE"
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -94,7 +96,7 @@ class Dashboard extends React.Component {
             edge="start"
             className={clsx(classes.menuButton, this.state.open && classes.hide)}
           >
-            <ChevronRightIcon/>
+            <ChevronRightIcon style={{fontSize:50}} />
           </IconButton>
         </div>
         <Drawer
