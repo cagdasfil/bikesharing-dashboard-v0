@@ -18,14 +18,14 @@ import { FaBicycle } from 'react-icons/fa';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 import ErrorIcon from '@material-ui/icons/Error';
 import DescriptionIcon from '@material-ui/icons/Description';
-import Usages from "./components/Usages";
-import Users from './components/Users';
-import Bikes from './components/Bikes';
-import Zones from './components/Zones';
-import Payments from './components/Payments';
-import Transactions from './components/Transactions';
-import Errors from './components/Errors';
-import Reports from './components/Reports';
+import Usages from "./pages/Usages";
+import Users from './pages/Users';
+import Bikes from './pages/Bikes';
+import Zones from './pages/Zones';
+import Payments from './pages/Payments';
+import Transactions from './pages/Transactions';
+import Errors from './pages/Errors';
+import Reports from './pages/Reports';
 
 const ExpansionPanel = withStyles({
   root: {

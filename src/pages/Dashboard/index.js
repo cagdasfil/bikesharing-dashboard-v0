@@ -8,7 +8,7 @@ import Analytics from './Analytics';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Bikes from './Collections/components/Bikes';
+import Bikes from './Collections/pages/Bikes';
 import { withStyles } from "@material-ui/core/styles";
 import clsx from 'clsx';
 
