@@ -1,8 +1,5 @@
 import React from 'react';
-import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
-import MuiTable from '@material-ui/core/Table';
-import MuiPaper from '@material-ui/core/Paper';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -11,7 +8,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { withStyles } from "@material-ui/core/styles";
 
-
 const styles = (theme) => ({
     tablecontainer:{
       width: "100%",
@@ -19,7 +15,7 @@ const styles = (theme) => ({
       backgroundColor:"lightgray"
     },
     tableheadrow:{
-      backgroundColor:"#333333",
+      backgroundColor:"#23395B",
       color:"white",
     },
 });
@@ -93,7 +89,6 @@ class CollectionTable extends React.Component {
             </div>
         );
     }
-
 }
 
 export default withStyles(styles, { withTheme: true })(CollectionTable);
