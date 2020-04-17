@@ -8,7 +8,7 @@ import Analytics from './Analytics';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Bikes from './Collections/components/Bikes';
+import Bikes from './Collections/pages/Bikes';
 import { withStyles } from "@material-ui/core/styles";
 import clsx from 'clsx';
 
@@ -16,7 +16,9 @@ const drawerWidth = 240;
 
 const styles = (theme) => ({
   root: {
+    minHeight: "100vh",
     display: 'flex',
+    backgroundColor: "#F7F7EE"
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -94,7 +96,7 @@ class Dashboard extends React.Component {
             edge="start"
             className={clsx(classes.menuButton, this.state.open && classes.hide)}
           >
-            <ChevronRightIcon/>
+            <ChevronRightIcon style={{fontSize:50}} />
           </IconButton>
         </div>
         <Drawer
