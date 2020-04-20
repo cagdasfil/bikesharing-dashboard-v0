@@ -75,7 +75,10 @@ export default class Mapping extends React.Component{
       addresses:[],
       ids:[],
       dataBaseZones:[],
+      newDataBaseZones:[],
+      indexOf:[],
       delete: false,
+      jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlOTYwMWYxMTg3OThiNzYyYzRlOGFmOCIsImlhdCI6MTU4Njg5MTIwMywiZXhwIjoxNTg5NDgzMjAzfQ.i6y02fhkMIgXBJT_pdCjzzEHID4-gI__EslUZdqp5eM",
     };
     this.handleZoneData = this.handleZoneData.bind(this);
 
@@ -106,30 +109,46 @@ export default class Mapping extends React.Component{
   
 
   handleZoneData = (data) => {
-    let zoneData = []
-    let dgn = []
+    let zoneData = [];
+    let dgn = [];
+    this.setState({dataBaseZones: []});
     for(var i in data){
       /*for(var j = 0 ; j< data[i].polygon.geometry.coordinates[0].length ; j++){
         dgn.push([data[i].polygon.geometry.coordinates[0][j][1],data[i].polygon.geometry.coordinates[0][j][0]])
       }*/
-      dgn.push([data[i]])
+      dgn.push([data[i]]);
       //zoneData.push(dgn)
+      this.state.dataBaseZones.push({name: data[i].name,
+                                    address: data[i].address,
+                                    id: data[i].id,
+                                    coordinates: data[i].polygon.geometry.coordinates[0],
+                                    leaflet_id:""
+                                  });
 
       //dgn = []
+      console.log('1--1:', data[i]);
     }
     
     this.setState({zone: dgn});
     
     this.setState({gotData: false});
     //this.setState({zone: zoneData});
-    console.log('1--1:', this.state.zone)
-    console.log('1--1:', this.state.zone[0][0].polygon)
+    
+    //console.log('1--1:', this.state.zone[0][0].polygon)
   };
 
 
   getData(){
-    fetch('http://35.234.156.204/zones')
-        .then((response) => {
+    fetch('http://35.234.156.204/zones', {
+      method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization:  'Bearer ' + this.state.jwt,
+          },
+        
+
+    }).then((response) => {
             return response.json();
         })
         .then((data) => {
@@ -141,11 +160,42 @@ export default class Mapping extends React.Component{
   postData(coord){
     const requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization:  'Bearer ' + this.state.jwt,
+    },
       body: JSON.stringify({ name: this.state.name, address: this.state.address, coordinates: [coord]})
     };
     console.log('deneme', requestOptions.body)
     fetch('http://35.234.156.204/zones/insertZone', requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
+  }
+
+
+  UpdateZone(id, coord){
+    const requestOptions = {
+      method: 'POST',
+      headers: { Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization:  'Bearer ' + this.state.jwt,
+    },
+      body: JSON.stringify({ zoneId: id, newCoordinates: [coord]})
+    };
+    console.log('deneme', requestOptions.body)
+    fetch('http://35.234.156.204/zones/updatePolygon', requestOptions)
         .then(async response => {
             const data = await response.json();
 
@@ -176,7 +226,7 @@ export default class Mapping extends React.Component{
             .openOn(map);
     }
 
-    map.on('click', onMapClick);
+    //map.on('click', onMapClick);
     
     
     map.addLayer(drawnItems);
@@ -203,22 +253,56 @@ export default class Mapping extends React.Component{
     map.addControl(drawControl);
 
 
-    map.on(L.Draw.Event.DRAWSTART, (e) => {
+    map.on('mouseover', (e) => {
       if(!this.state.gotData){
-        this.setState({dataBaseZones: []})
         for(var i = 0 ; i< this.state.zone.length ; i++) {
-          this.state.dataBaseZones.push({name: this.state.zone[i][0].name,
-                                        address: this.state.zone[i][0].address,
-                                        id: this.state.zone[i][0].id,
-                                        coordinates: this.state.zone[i][0].polygon.geometry.coordinates[0]
-                                        })
           var geojsonLayer = L.geoJson(this.state.zone[i][0].polygon);
-          geojsonLayer.getLayers()[0].addTo(drawnItems);  
+          this.state.dataBaseZones[i].leaflet_id = geojsonLayer._leaflet_id-1;
+          geojsonLayer.getLayers()[0].addTo(drawnItems);
+          
         }
-        console.log('DATABASE', this.state.dataBaseZones)
+        this.setState({newDataBaseZones: this.state.dataBaseZones});
+        console.log('DATABASE', drawnItems);
         this.setState({gotData: true});  
       }
       });
+
+    var container = $('<div />');
+
+    var update = [];
+
+    function sayHello(e) {
+      var ds = [];
+      popup
+        .setLatLng(e.latlng)
+        .setContent(container[0])
+        .openOn(map);
+      
+      e.layer._latlngs[0].forEach(element => { ds.push([element.lng, element.lat]);
+      update = ds;
+      
+        
+      
+        
+      });
+      console.log('E.LATLNG', ds);
+  }
+    // Delegate all event handling for the container itself and its contents to the container
+    container.on('click', '.smallPolygonLink', 
+        this.handleClick
+    );
+
+    /*container.on('click', '.smallPolygonLink',function() {
+
+      alert("Zone Reshaped");
+  });*/
+    
+    // Insert whatever you want into the container, using whichever approach you prefer
+    container.html("<a href='#' class='smallPolygonLink'>Update Zone</a>.");
+    container.append($('<span class="bold">').text(" :)"))
+
+    // Insert the container into the popup
+    drawnItems.on('click', sayHello);
 
     map.on(L.Draw.Event.CREATED, (e) => {
 
@@ -256,19 +340,7 @@ export default class Mapping extends React.Component{
       
       ////
 
-      var container = $('<div />');
-
-      // Delegate all event handling for the container itself and its contents to the container
-      container.on('click', '.smallPolygonLink', function() {
-          alert("test");
-      });
-
-      // Insert whatever you want into the container, using whichever approach you prefer
-      container.html("This is a link: <a href='#' class='smallPolygonLink'>Click me</a>.");
-      container.append($('<span class="bold">').text(" :)"))
-
-      // Insert the container into the popup
-      drawnItems.bindPopup(container[0]);
+      
 
 
       //drawnItems.bindPopup(customPopup,customOptions);
@@ -295,7 +367,7 @@ export default class Mapping extends React.Component{
         var LatLng = [];
         if(allLayer[i].geometry.coordinates[0].length >= 3){
           for (let j = 0; j < allLayer[i].geometry.coordinates[0].length; j++) {
-            LatLng.push([allLayer[i].geometry.coordinates[0][j][0], allLayer[i].geometry.coordinates[0][j][1]]);           
+            LatLng.push([allLayer[i].geometry.coordinates[0][j][1], allLayer[i].geometry.coordinates[0][j][0]]);           
           }
 
           zones.push({coordinates: LatLng});
@@ -319,6 +391,30 @@ export default class Mapping extends React.Component{
       layers.eachLayer((layer) => {
         countOfEditedLayers++;
       });
+
+      var index = [];
+      for (let i = 0; i < this.state.dataBaseZones.length; i++) {
+        if (e.layers._layers[this.state.dataBaseZones[i].leaflet_id]) {
+          index.push(i);
+          var temp = [];
+          var latlngs = e.layers._layers[this.state.dataBaseZones[i].leaflet_id]._latlngs[0];
+          for (let j = 0; j < latlngs.length; j++) {
+            temp.push([latlngs[j].lng, latlngs[j].lat]);            
+          }
+          temp.push([latlngs[0].lng, latlngs[0].lat]);  
+          console.log('ID-1', this.state.dataBaseZones[i].coordinates)
+          this.state.dataBaseZones[i].coordinates = temp;
+          this.UpdateZone(this.state.dataBaseZones[i].id, this.state.dataBaseZones[i].coordinates);
+          console.log('ID-2', temp)
+        }
+        
+      }
+
+      this.setState({indexOf: index})
+
+      console.log('E', this.state.indexOf)
+      
+      
     });
 
     map.on(L.Draw.Event.DELETED, (e) => {
@@ -331,16 +427,22 @@ export default class Mapping extends React.Component{
   }
 
   ters(array){
+    var newArray = array;
     for (let i = 0; i < array.length; i++) {
-      array[i].reverse();
+      newArray[i].reverse();
       
     }
-    return array;
+    console.log('Array', newArray);
+    return newArray;
   }
   
   deleteClick(id){
     fetch('http://35.234.156.204/zones/' + id, {
       method: 'DELETE',
+      headers: { Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization:  'Bearer ' + this.state.jwt,
+    },
     })
     .then(res => res.text()) // or res.json()
     .then(res => console.log(res))
@@ -354,6 +456,8 @@ export default class Mapping extends React.Component{
     console.log('n2',e);
     
   }
+
+
   
   getEventIcon(type) {
   switch (type) {
@@ -383,7 +487,7 @@ export default class Mapping extends React.Component{
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           
-          {this.state.dataBaseZones.map(({name, address, id, coordinates}) => (
+          {this.state.newDataBaseZones.map(({name, address, id, coordinates}) => (
             <Polygon
               
               positions={this.ters(coordinates)}
@@ -416,7 +520,7 @@ export default class Mapping extends React.Component{
           {this.state.newZone.map(({name, address, coordinates }) => (
             <Polygon
               
-              positions={this.ters(coordinates)}
+              positions={coordinates}
 
 
               color='#000099'
