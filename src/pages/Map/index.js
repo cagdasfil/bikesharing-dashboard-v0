@@ -78,6 +78,8 @@ export default class Mapping extends React.Component{
       newDataBaseZones:[],
       indexOf:[],
       delete: false,
+      isUpdate: false,
+      updateCoordinates: [],
       jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlOTYwMWYxMTg3OThiNzYyYzRlOGFmOCIsImlhdCI6MTU4Njg5MTIwMywiZXhwIjoxNTg5NDgzMjAzfQ.i6y02fhkMIgXBJT_pdCjzzEHID4-gI__EslUZdqp5eM",
     };
     this.handleZoneData = this.handleZoneData.bind(this);
@@ -452,6 +454,71 @@ export default class Mapping extends React.Component{
       }
     }
   }
+
+  updateNameAndAddress(idx, coord){
+    var temp = [];
+    temp.push({id: idx, coordinates: coord});
+    this.setState({updateCoordinates: temp, isUpdate:true});
+    //console.log('DOGAN', this.state.updateCoordinates);
+    /*for (let i = 0; i < this.state.newDataBaseZones.length; i++) {
+      if (this.state.newDataBaseZones[i].id ===idx) {
+        this.state.newDataBaseZones.splice(i, 1);
+        console.log('DOGAN', this.state.newDataBaseZones);
+      }
+      
+    }*/
+  }
+
+
+ /* update(id, coordinates){
+    fetch('http://35.234.156.204/zones/' + id, {
+      method: 'PUT',
+      headers: { Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization:  'Bearer ' + this.state.jwt,
+    },
+      body: JSON.stringify({ zoneId: id, newCoordinates: [coord]})
+    })
+    .then(res => res.text()) // or res.json()
+    .then(res => console.log('Salı', res))
+  }*/
+
+  update(id, coord){
+    const requestOptions = {
+      method: 'PUT',
+      headers: { Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization:  'Bearer ' + this.state.jwt,
+    },
+      body: JSON.stringify({name: this.state.name, address: this.state.address})
+    };
+    fetch('http://35.234.156.204/zones/' + id, requestOptions)
+        .then(async response => {
+            const data = await response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
+    
+    for (let i = 0; i < this.state.newDataBaseZones.length; i++) {
+      if(this.state.newDataBaseZones[i].id === id){
+        this.state.newDataBaseZones[i].name = this.state.name;
+        this.state.newDataBaseZones[i].address = this.state.address;
+      }
+    }
+
+    this.setState({isUpdate:false});
+    
+  }
+
   handleClick(e) {
     console.log('n2',e);
     
@@ -496,6 +563,7 @@ export default class Mapping extends React.Component{
               color='#3E2723'
               onClick={this.handleClick}
             >
+              {!this.state.isUpdate?
               <Popup >
                 <div className="Name">
                   <form  >
@@ -507,13 +575,39 @@ export default class Mapping extends React.Component{
                       <div className="Setting">
                         <Form.Label className="FormLabels">{address}</Form.Label>
                       </div>
-                      <button className ="SetMargin" type="submit" >Update Zone</button>
+                      <button className ="SetMargin" type="button" onClick={() => this.updateNameAndAddress(id, coordinates)}>Update Zone</button>
                       <button className ="SetMargin" type="submit" onClick={() => this.deleteClick(id)}>Delete Zone</button>
                                     
                     </div>                   
                   </form>
                 </div>
               </Popup>
+              :
+              <Popup >
+                <div className="Name">
+                  <form  >
+                    <div >
+                    <div className="Setting">
+                        <Form.Label className="FormLabels">Name: </Form.Label>
+                        <Form.Control className="FormBoxes"
+                        autoFocus
+                        onChange={e => this.setState({name : e.target.value})}
+                        />
+                      </div>
+                      
+                      <div className="Setting">
+                        <Form.Label className="FormLabels">Address: </Form.Label>
+                        <Form.Control className="FormBoxes2"
+                        onChange={e => this.setState({address : e.target.value})}
+                        />
+                      </div>
+                      <button className ="SetMargin" type="button" onClick={() => this.update(id, coordinates)}>Update Zone</button>
+                                    
+                    </div>                   
+                  </form>
+                </div>
+              </Popup>
+            }
             </Polygon>
           ))}
           
