@@ -47,7 +47,7 @@ export default class Errors extends React.Component {
           formattedData.push({ id: data[i]._id,
                                 status: data[i].status,
                                 errorCode: data[i].errorCode,
-                                message: data[i].message.message,
+                                message: data[i].message? data[i].message.message : null,
                                 createdAt: data[i].createdAt,
                                 updatedAt: data[i].updatedAt,
           });
@@ -56,13 +56,17 @@ export default class Errors extends React.Component {
   };
 
   getData(){
-    fetch('http://35.234.156.204/errors')
+    fetch('http://35.234.156.204/errors', {
+      method : 'get',
+      headers : {'Content-Type':'application/json',
+      'Authorization': `Bearer ${this.props.jwt}`},
+    })
         .then((response) => {
             return response.json();
         })
         .then((data) => {
             this.handleErrorData(data);
-    });
+        });
   }
 
   componentWillMount(){

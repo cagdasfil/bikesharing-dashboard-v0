@@ -56,13 +56,17 @@ export default class Payments extends React.Component {
     };
   
     getData(){
-      fetch('http://35.234.156.204/payments')
+      fetch('http://35.234.156.204/payments', {
+        method : 'get',
+        headers : {'Content-Type':'application/json',
+        'Authorization': `Bearer ${this.props.jwt}`},
+      })
           .then((response) => {
               return response.json();
           })
           .then((data) => {
               this.handlePaymentData(data);
-      });
+          });
     }
 
     componentWillMount(){
