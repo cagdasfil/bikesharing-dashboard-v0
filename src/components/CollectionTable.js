@@ -15,8 +15,8 @@ const styles = (theme) => ({
       backgroundColor:"lightgray"
     },
     tableheadrow:{
-      backgroundColor:"#23395B",
-      color:"white",
+      backgroundColor:"#336699",
+      color:"lightgray",
     },
 });
 
