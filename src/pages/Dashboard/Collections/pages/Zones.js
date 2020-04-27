@@ -64,13 +64,17 @@ export default class Zones extends React.Component {
   };
 
   getData(){
-    fetch('http://35.234.156.204/zones')
+    fetch('http://35.234.156.204/zones', {
+      method : 'get',
+      headers : {'Content-Type':'application/json',
+      'Authorization': `Bearer ${this.props.jwt}`},
+    })
         .then((response) => {
             return response.json();
         })
         .then((data) => {
             this.handleZoneData(data);
-    });
+        });
   }
 
   componentWillMount(){

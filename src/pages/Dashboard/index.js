@@ -12,6 +12,9 @@ import Bikes from './Collections/pages/Bikes';
 import { withStyles } from "@material-ui/core/styles";
 import clsx from 'clsx';
 
+import {Redirect} from "react-router-dom"
+
+
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -67,7 +70,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state={
       open: false,
-      selectedTab: <Bikes />
+      selectedTab: <Bikes jwt={this.props.location.state.jwt}/>
     };
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
@@ -86,6 +89,9 @@ class Dashboard extends React.Component {
   };
 
   render() {
+    if(!this.props.location.state || !this.props.location.state.jwt){
+      return <Redirect to ="/"/>;
+    } 
     const {classes} = this.props;
     return (
       <div className={classes.root}>
@@ -113,8 +119,8 @@ class Dashboard extends React.Component {
             <ChevronLeftIcon style={{color:"lightgray"}}/>
           </IconButton>
           </div>
-          <Collections callBack={this.handleClick} />
-          <Analytics callBack={this.handleClick}/>
+          <Collections callBack={this.handleClick} jwt={this.props.location.state.jwt}/>
+          <Analytics callBack={this.handleClick} jwt={this.props.location.state.jwt}/>
         </Drawer>
         <main
           className={clsx(classes.content, {

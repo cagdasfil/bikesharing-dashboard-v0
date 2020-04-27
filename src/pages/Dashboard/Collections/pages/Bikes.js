@@ -20,8 +20,8 @@ export default class Bikes extends React.Component {
       minWidth: 100 
     },
     {
-      id: 'lastDockerId',
-      label: 'lastDockerId',
+      id: 'lastZoneId',
+      label: 'lastZoneId',
       minWidth: 100,
     },
     {
@@ -51,7 +51,7 @@ export default class Bikes extends React.Component {
       for(var i in data){
           formattedData.push({ id: data[i]._id,
                                 barcode: data[i].barcode,
-                                lastDockerId: data[i].lastDockerId,
+                                lastZoneId: data[i].lastZoneId,
                                 isAvailable: data[i].isAvailable.toString(),
                                 isLocked: data[i].isLocked.toString(),
                                 createdAt: data[i].createdAt,
@@ -62,13 +62,17 @@ export default class Bikes extends React.Component {
   };
 
   getData(){
-    fetch('http://35.234.156.204/bikes')
+    fetch('http://35.234.156.204/bikes', {
+      method : 'get',
+      headers : {'Content-Type':'application/json',
+      'Authorization': `Bearer ${this.props.jwt}`},
+    })
         .then((response) => {
             return response.json();
         })
         .then((data) => {
             this.handleBikeData(data);
-    });
+        });
   }
 
   componentWillMount(){
