@@ -3,17 +3,25 @@ import { Button, Form } from "react-bootstrap";
 import './login.css';
 import history from "../../services/history";
 
+
+
 export default class Login extends React.Component{
 
   constructor(props){
     super(props);
     this.state={
+      jwt : {},
+      user : {},
       admin : "",
       password : ""
     };
+
     this.validateForm = this.validateForm.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.sendLoginRequest = this.sendLoginRequest.bind(this);
     this.loginHandler = this.loginHandler.bind(this);
+    this.loginErrorHandler = this.loginErrorHandler.bind(this);
+    
   }
 
   validateForm() {
@@ -24,8 +32,44 @@ export default class Login extends React.Component{
     event.preventDefault();
   }
 
-  loginHandler() {
-    history.push("/dashboard");
+  sendLoginRequest(){
+    fetch('http://35.234.156.204/auth/local/', {
+      method : 'post',
+      headers : {'Content-Type':'application/json'},
+      body : JSON.stringify({
+        "identifier" : this.state.admin,
+        "password" : this.state.password
+      }),
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((loginResponse) => {
+            loginResponse.user ? this.loginHandler(loginResponse) : this.loginErrorHandler(loginResponse)
+        });
+  }
+
+  loginErrorHandler(loginResponse){
+    //Invalid id password case
+    console.log(loginResponse)
+  }
+
+  loginHandler(loginResponse) {
+    
+    //User return case
+    this.setState({user : loginResponse.user})
+    this.setState({jwt : loginResponse.jwt})
+
+    //Check admin or user
+    loginResponse.user.role.type === "admin" 
+      ?
+        this.props.history.push({
+          pathname: '/dashboard',
+          state: { jwt: loginResponse.jwt }
+        })
+
+      :
+        console.log("You are not a system admin!")
   }
 
   render(){
@@ -48,7 +92,7 @@ export default class Login extends React.Component{
                 type="password"
                 className="FormBoxes"
               />
-              <Button className="Button" block bsSize="large" disabled={!this.validateForm()} type="submit" onClick={this.loginHandler}>
+              <Button className="Button" block bsSize="large" disabled={!this.validateForm()} type="submit" onClick={this.sendLoginRequest}>
                   Login
               </Button>
             </form>
