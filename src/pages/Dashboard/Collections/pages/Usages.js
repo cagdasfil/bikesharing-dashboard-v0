@@ -20,13 +20,13 @@ import CollectionTable from '../../../../components/CollectionTable';
         minWidth: 100 
       },
       {
-        id: 'startDockerId',
-        label: 'startDockerId',
+        id: 'startZoneId',
+        label: 'startZoneId',
         minWidth: 100,
       },
       {
-        id: 'endDockerId',
-        label: 'endDockerId',
+        id: 'endZoneId',
+        label: 'endZoneId',
         minWidth: 100,
       },
       {
@@ -46,8 +46,8 @@ import CollectionTable from '../../../../components/CollectionTable';
         for(var i in data){
             formattedData.push({ id: data[i]._id,
                                  userId: data[i].userId,
-                                 startDockerId: data[i].startDockerId,
-                                 endDockerId: data[i].endDockerId,
+                                 startZoneId: data[i].startZoneId,
+                                 endZoneId: data[i].endZoneId,
                                  createdAt: data[i].createdAt,
                                  updatedAt: data[i].updatedAt,
             });
@@ -56,13 +56,17 @@ import CollectionTable from '../../../../components/CollectionTable';
     };
   
     getData(){
-      fetch('http://35.234.156.204/usages')
+      fetch('http://35.234.156.204/usages', {
+        method : 'get',
+        headers : {'Content-Type':'application/json',
+        'Authorization': `Bearer ${this.props.jwt}`},
+      })
           .then((response) => {
               return response.json();
           })
           .then((data) => {
               this.handleUsageData(data);
-      });
+          });
     }
 
     componentWillMount(){

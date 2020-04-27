@@ -79,14 +79,14 @@ export default class Collections extends React.Component {
 
 
   handleClick = [
-    () => {this.props.callBack(<Users/>);},
-    () => {this.props.callBack(<Bikes/>);},
-    () => {this.props.callBack(<Zones/>);},
-    () => {this.props.callBack(<Usages/>);},
-    () => {this.props.callBack(<Payments/>);},
-    () => {this.props.callBack(<Transactions/>);},
-    () => {this.props.callBack(<Errors/>);},
-    () => {this.props.callBack(<Reports/>);},
+    () => {this.props.callBack(<Users jwt={this.props.jwt}/>);},
+    () => {this.props.callBack(<Bikes jwt={this.props.jwt}/>);},
+    () => {this.props.callBack(<Zones jwt={this.props.jwt}/>);},
+    () => {this.props.callBack(<Usages jwt={this.props.jwt}/>);},
+    () => {this.props.callBack(<Payments jwt={this.props.jwt}/>);},
+    () => {this.props.callBack(<Transactions jwt={this.props.jwt}/>);},
+    () => {this.props.callBack(<Errors jwt={this.props.jwt}/>);},
+    () => {this.props.callBack(<Reports jwt={this.props.jwt}/>);},
   ];
 
   tabs = ["Users", "Bikes", "Zones", "Usages", "Payments", "Transactions", "Errors", "Reports"];

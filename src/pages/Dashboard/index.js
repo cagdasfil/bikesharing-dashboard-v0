@@ -70,7 +70,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state={
       open: false,
-      selectedTab: <Bikes />
+      selectedTab: <Bikes jwt={this.props.location.state.jwt}/>
     };
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.handleDrawerClose = this.handleDrawerClose.bind(this);
@@ -119,8 +119,8 @@ class Dashboard extends React.Component {
             <ChevronLeftIcon style={{color:"lightgray"}}/>
           </IconButton>
           </div>
-          <Collections callBack={this.handleClick} />
-          <Analytics callBack={this.handleClick}/>
+          <Collections callBack={this.handleClick} jwt={this.props.location.state.jwt}/>
+          <Analytics callBack={this.handleClick} jwt={this.props.location.state.jwt}/>
         </Drawer>
         <main
           className={clsx(classes.content, {
