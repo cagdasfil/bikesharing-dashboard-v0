@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Form } from "react-bootstrap";
 import './login.css';
+import configuration from "../../constants/configuration";
 
 export default class Login extends React.Component{
 
@@ -30,7 +31,7 @@ export default class Login extends React.Component{
   }
 
   sendLoginRequest(){
-    fetch('http://35.189.94.121/auth/local/', {
+    fetch( configuration.server.apiAddress + '/auth/local/', {
       method : 'post',
       headers : {'Content-Type':'application/json'},
       body : JSON.stringify({
