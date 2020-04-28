@@ -1,9 +1,6 @@
 import React from "react";
 import { Button, Form } from "react-bootstrap";
 import './login.css';
-import history from "../../services/history";
-
-
 
 export default class Login extends React.Component{
 
@@ -33,7 +30,7 @@ export default class Login extends React.Component{
   }
 
   sendLoginRequest(){
-    fetch('http://35.234.156.204/auth/local/', {
+    fetch('http://35.189.94.121/auth/local/', {
       method : 'post',
       headers : {'Content-Type':'application/json'},
       body : JSON.stringify({
@@ -61,15 +58,16 @@ export default class Login extends React.Component{
     this.setState({jwt : loginResponse.jwt})
 
     //Check admin or user
-    loginResponse.user.role.type === "admin" 
-      ?
-        this.props.history.push({
-          pathname: '/dashboard',
-          state: { jwt: loginResponse.jwt }
-        })
-
-      :
-        console.log("You are not a system admin!")
+    if(loginResponse.user.role.type === "admin"){
+      localStorage.setItem("jwt", loginResponse.jwt);
+      this.props.history.push({
+        pathname: '/dashboard',
+        state: { jwt: loginResponse.jwt }
+      });
+    }
+    else{
+      console.log("You are not a system admin!");
+    }
   }
 
   render(){
