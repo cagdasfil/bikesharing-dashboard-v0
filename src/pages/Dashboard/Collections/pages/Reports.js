@@ -56,7 +56,7 @@ import CollectionTable from '../../../../components/CollectionTable';
     };
   
     getData(){
-      fetch('http://35.234.156.204/reports', {
+      fetch('http://35.189.94.121/reports', {
         method : 'get',
         headers : {'Content-Type':'application/json',
         'Authorization': `Bearer ${this.props.jwt}`},

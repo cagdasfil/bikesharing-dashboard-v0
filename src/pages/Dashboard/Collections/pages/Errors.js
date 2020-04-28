@@ -56,7 +56,7 @@ export default class Errors extends React.Component {
   };
 
   getData(){
-    fetch('http://35.234.156.204/errors', {
+    fetch('http://35.189.94.121/errors', {
       method : 'get',
       headers : {'Content-Type':'application/json',
       'Authorization': `Bearer ${this.props.jwt}`},

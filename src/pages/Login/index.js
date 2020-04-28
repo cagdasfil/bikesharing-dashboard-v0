@@ -33,7 +33,7 @@ export default class Login extends React.Component{
   }
 
   sendLoginRequest(){
-    fetch('http://35.234.156.204/auth/local/', {
+    fetch('http://35.189.94.121/auth/local/', {
       method : 'post',
       headers : {'Content-Type':'application/json'},
       body : JSON.stringify({

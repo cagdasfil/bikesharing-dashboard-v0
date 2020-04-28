@@ -62,7 +62,7 @@ export default class Bikes extends React.Component {
   };
 
   getData(){
-    fetch('http://35.234.156.204/bikes', {
+    fetch('http://35.189.94.121/bikes', {
       method : 'get',
       headers : {'Content-Type':'application/json',
       'Authorization': `Bearer ${this.props.jwt}`},

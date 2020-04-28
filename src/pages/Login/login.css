@@ -57,3 +57,15 @@
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   border-color: royalblue;
 }
+
+
+.saveButton {
+  margin-top: 4vh;
+  margin-left: 2vh;
+  height: 5vh;
+  background-color:#336699;
+  color: white;
+  border-radius: 1vh;
+  font-size: medium;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}

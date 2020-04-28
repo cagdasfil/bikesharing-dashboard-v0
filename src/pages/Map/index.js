@@ -141,7 +141,7 @@ export default class Mapping extends React.Component{
 
 
   getData(){
-    fetch('http://35.234.156.204/zones', {
+    fetch('http://35.189.94.121/zones', {
       method: 'GET',
         headers: {
             Accept: 'application/json',
@@ -169,7 +169,7 @@ export default class Mapping extends React.Component{
       body: JSON.stringify({ name: this.state.name, address: this.state.address, coordinates: [coord]})
     };
     console.log('deneme', requestOptions.body)
-    fetch('http://35.234.156.204/zones/insertZone', requestOptions)
+    fetch('http://35.189.94.121/zones/insertZone', requestOptions)
         .then(async response => {
             const data = await response.json();
 
@@ -197,7 +197,7 @@ export default class Mapping extends React.Component{
       body: JSON.stringify({ zoneId: id, newCoordinates: [coord]})
     };
     console.log('deneme', requestOptions.body)
-    fetch('http://35.234.156.204/zones/updatePolygon', requestOptions)
+    fetch('http://35.189.94.121/zones/updatePolygon', requestOptions)
         .then(async response => {
             const data = await response.json();
 
@@ -439,7 +439,7 @@ export default class Mapping extends React.Component{
   }
   
   deleteClick(id){
-    fetch('http://35.234.156.204/zones/' + id, {
+    fetch('http://35.189.94.121/zones/' + id, {
       method: 'DELETE',
       headers: { Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -471,7 +471,7 @@ export default class Mapping extends React.Component{
 
 
  /* update(id, coordinates){
-    fetch('http://35.234.156.204/zones/' + id, {
+    fetch('http://35.189.94.121/zones/' + id, {
       method: 'PUT',
       headers: { Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -492,7 +492,7 @@ export default class Mapping extends React.Component{
     },
       body: JSON.stringify({name: this.state.name, address: this.state.address})
     };
-    fetch('http://35.234.156.204/zones/' + id, requestOptions)
+    fetch('http://35.189.94.121/zones/' + id, requestOptions)
         .then(async response => {
             const data = await response.json();
 
