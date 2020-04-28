@@ -65,13 +65,13 @@ export default class Users extends React.Component{
         super(props);
         this.state={
           user:[],
-          age:""
+          role:""
         };
       }
 
     
     handleChange = (event) => {
-      this.setState({age:event.target.value});
+      this.setState({role:event.target.value});
     };
   
       columns = [
@@ -152,7 +152,7 @@ export default class Users extends React.Component{
               <Select
                 labelId="demo-customized-select-label"
                 id="demo-customized-select"
-                value={this.state.age}
+                value={this.state.role}
                 onChange={this.handleChange}
                 input={<BootstrapInput />}
                 displayEmpty
