@@ -7,7 +7,7 @@ import {Map, Marker, Popup, TileLayer, Polygon } from "react-leaflet";
 import Draw from 'leaflet-draw';
 import "./map.css"
 import { render } from "@testing-library/react";
-import configuration from "../../constants/configuration";
+import configuration from "../../../../constants/configuration";
 import L from 'leaflet';
 import $ from 'jquery';
 window.$ = $;

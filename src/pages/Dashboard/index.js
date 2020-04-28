@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Collections from './Collections';
 import Analytics from './Analytics';
+import Map from './Map';
 
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -121,6 +122,7 @@ class Dashboard extends React.Component {
           </div>
           <Collections callBack={this.handleClick} jwt={this.props.location.state.jwt}/>
           <Analytics callBack={this.handleClick} jwt={this.props.location.state.jwt}/>
+          <Map callBack={this.handleClick} jwt={this.props.location.state.jwt}/>
         </Drawer>
         <main
           className={clsx(classes.content, {
