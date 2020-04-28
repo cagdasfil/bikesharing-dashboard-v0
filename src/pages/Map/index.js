@@ -7,6 +7,7 @@ import {Map, Marker, Popup, TileLayer, Polygon } from "react-leaflet";
 import Draw from 'leaflet-draw';
 import "./map.css"
 import { render } from "@testing-library/react";
+import configuration from "../../constants/configuration";
 import L from 'leaflet';
 import $ from 'jquery';
 window.$ = $;
@@ -141,7 +142,7 @@ export default class Mapping extends React.Component{
 
 
   getData(){
-    fetch('http://35.234.156.204/zones', {
+    fetch( configuration.server.apiAddress + '/zones', {
       method: 'GET',
         headers: {
             Accept: 'application/json',
@@ -169,7 +170,7 @@ export default class Mapping extends React.Component{
       body: JSON.stringify({ name: this.state.name, address: this.state.address, coordinates: [coord]})
     };
     console.log('deneme', requestOptions.body)
-    fetch('http://35.234.156.204/zones/insertZone', requestOptions)
+    fetch( configuration.server.apiAddress + '/zones/insertZone', requestOptions)
         .then(async response => {
             const data = await response.json();
 
@@ -197,7 +198,7 @@ export default class Mapping extends React.Component{
       body: JSON.stringify({ zoneId: id, newCoordinates: [coord]})
     };
     console.log('deneme', requestOptions.body)
-    fetch('http://35.234.156.204/zones/updatePolygon', requestOptions)
+    fetch(configuration.server.apiAddress + '/zones/updatePolygon', requestOptions)
         .then(async response => {
             const data = await response.json();
 
@@ -439,7 +440,7 @@ export default class Mapping extends React.Component{
   }
   
   deleteClick(id){
-    fetch('http://35.234.156.204/zones/' + id, {
+    fetch(configuration.server.apiAddress + '/zones/' + id, {
       method: 'DELETE',
       headers: { Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -492,7 +493,7 @@ export default class Mapping extends React.Component{
     },
       body: JSON.stringify({name: this.state.name, address: this.state.address})
     };
-    fetch('http://35.234.156.204/zones/' + id, requestOptions)
+    fetch(configuration.server.apiAddress + '/zones/' + id, requestOptions)
         .then(async response => {
             const data = await response.json();
 

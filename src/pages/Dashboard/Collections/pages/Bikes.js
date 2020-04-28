@@ -1,5 +1,6 @@
 import React from 'react';
 import CollectionTable from '../../../../components/CollectionTable';
+import configuration from '../../../../constants/configuration';
 
 export default class Bikes extends React.Component {
 
@@ -62,7 +63,7 @@ export default class Bikes extends React.Component {
   };
 
   getData(){
-    fetch('http://35.234.156.204/bikes', {
+    fetch( configuration.server.apiAddress + '/bikes', {
       method : 'get',
       headers : {'Content-Type':'application/json',
       'Authorization': `Bearer ${this.props.jwt}`},

@@ -1,5 +1,6 @@
 import React from 'react';
 import CollectionTable from '../../../../components/CollectionTable';
+import configuration from '../../../../constants/configuration';
   
 export default class Errors extends React.Component {
 
@@ -56,7 +57,7 @@ export default class Errors extends React.Component {
   };
 
   getData(){
-    fetch('http://35.234.156.204/errors', {
+    fetch( configuration.server.apiAddress + '/errors', {
       method : 'get',
       headers : {'Content-Type':'application/json',
       'Authorization': `Bearer ${this.props.jwt}`},

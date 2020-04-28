@@ -1,5 +1,6 @@
 import React from 'react';
 import CollectionTable from '../../../../components/CollectionTable';
+import configuration from '../../../../constants/configuration';
   
   export default class Usages extends React.Component {
 
@@ -56,7 +57,7 @@ import CollectionTable from '../../../../components/CollectionTable';
     };
   
     getData(){
-      fetch('http://35.234.156.204/usages', {
+      fetch( configuration.server.apiAddress + '/usages', {
         method : 'get',
         headers : {'Content-Type':'application/json',
         'Authorization': `Bearer ${this.props.jwt}`},

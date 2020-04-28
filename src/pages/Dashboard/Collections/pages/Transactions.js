@@ -1,5 +1,6 @@
 import React from 'react';
 import CollectionTable from '../../../../components/CollectionTable';
+import configuration from '../../../../constants/configuration';
   
 export default class Transactions extends React.Component {
 
@@ -62,7 +63,7 @@ export default class Transactions extends React.Component {
     };
   
     getData(){
-      fetch('http://35.234.156.204/transactions', {
+      fetch( configuration.server.apiAddress + '/transactions', {
         method : 'get',
         headers : {'Content-Type':'application/json',
         'Authorization': `Bearer ${this.props.jwt}`},

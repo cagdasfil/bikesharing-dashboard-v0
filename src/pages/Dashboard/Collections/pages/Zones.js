@@ -1,5 +1,6 @@
 import React from 'react';
 import CollectionTable from '../../../../components/CollectionTable';
+import configuration from '../../../../constants/configuration';
 
 export default class Zones extends React.Component {
   constructor(props){
@@ -64,7 +65,7 @@ export default class Zones extends React.Component {
   };
 
   getData(){
-    fetch('http://35.234.156.204/zones', {
+    fetch( configuration.server.apiAddress + '/zones', {
       method : 'get',
       headers : {'Content-Type':'application/json',
       'Authorization': `Bearer ${this.props.jwt}`},
